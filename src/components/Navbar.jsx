@@ -1,10 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import logo from '../assets/logo.png';
 import { HiOutlineMenuAlt3, HiOutlineX } from 'react-icons/hi';
+import Modal from './Modal';
+import LoginForm from './LoginForm';
 
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isLoginOpen, setLoginOpen] = useState(false);
+  
+  const openLogin = useCallback(() => setLoginOpen(true), []);
+  const closeLogin = useCallback(() => setLoginOpen(false), []);
 
   return (
     <nav className="sticky top-0 z-50 px-4 py-3 shadow-sm bg-gray-50 sm:px-8 md:px-16">
@@ -21,9 +27,12 @@ const Navbar = () => {
         </ul>
 
         {/* Login Button (Desktop) */}
-        <a href="#" className="hidden px-4 py-2 text-sm font-semibold text-white transition bg-orange-500 rounded-md md:block hover:bg-orange-600">
+        <a onClick={openLogin} href="#" className="hidden px-4 py-2 text-sm font-semibold text-white transition bg-orange-500 rounded-md md:block hover:bg-orange-600">
           Login
         </a>
+        <Modal isOpen={isLoginOpen} onClose={closeLogin}>
+        <LoginForm/>
+      </Modal>
 
         {/* Hamburger Menu (Mobile) */}
         <button

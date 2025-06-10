@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { X } from 'lucide-react'; // uses lucide-react for the close icon
 
-const Modal = ({ isOpen, onClose, title, children }) => {
+const Modal = ({ isOpen, onClose, children }) => {
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={onClose}>
@@ -39,10 +39,6 @@ const Modal = ({ isOpen, onClose, title, children }) => {
                   <X size={20} />
                 </button>
 
-                {/* Title */}
-                <Dialog.Title className="text-lg font-medium leading-6 text-gray-900">
-                  {title}
-                </Dialog.Title>
 
                 {/* Content */}
                 <div className="mt-2">{children}</div>

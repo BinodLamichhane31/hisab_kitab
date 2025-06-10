@@ -10,6 +10,7 @@ import Modal from './Modal';
 import { fadeInUp } from '../animations/motions';
 import { slideLeft } from '../animations/motions';
 import RegisterForm from './RegisterForm';
+import LoginForm from './LoginForm';
 
 
 const Hero = () => {
@@ -69,11 +70,11 @@ const Hero = () => {
       </div>
 
       {/* Modals */}
-      <Modal isOpen={isSignupOpen} onClose={closeSignup} title="Sign Up">
+      <Modal isOpen={isSignupOpen} onClose={closeSignup}>
         <RegisterForm/>
       </Modal>
-      <Modal isOpen={isLoginOpen} onClose={closeLogin} title="Login">
-        <p className="text-sm text-gray-500">Na</p>
+      <Modal isOpen={isLoginOpen} onClose={closeLogin}>
+        <LoginForm/>
       </Modal>
     </section>
   );
