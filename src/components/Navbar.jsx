@@ -1,8 +1,9 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useContext } from 'react';
 import logo from '../assets/logo.png';
 import { HiOutlineMenuAlt3, HiOutlineX } from 'react-icons/hi';
 import Modal from './Modal';
 import LoginForm from './LoginForm';
+import { AuthContext } from '../auth/authProvider';
 
 
 const Navbar = () => {
@@ -12,11 +13,32 @@ const Navbar = () => {
   const openLogin = useCallback(() => setLoginOpen(true), []);
   const closeLogin = useCallback(() => setLoginOpen(false), []);
 
+  const { user, logout } = useContext(AuthContext);
+
+
   return (
     <nav className="sticky top-0 z-50 px-4 py-3 shadow-sm bg-gray-50 sm:px-8 md:px-16">
       <div className="flex items-center justify-between">
         {/* Logo */}
         <img src={logo} alt="Logo" className="w-16 h-auto md:w-20" />
+
+        {/* {
+            user && (
+              <div className='flex gap-6'>
+                <div>
+                  <h1>{user.fname+" "+user.lname}</h1>
+                  <p>{user.role}</p>
+                </div>
+              
+
+              <a onClick={logout} className="hidden px-4 py-2 text-sm font-semibold text-white transition bg-orange-500 rounded-md md:block hover:bg-orange-600">
+                Logout
+              </a>
+              </div>
+            )
+        }  */}
+
+        {!user && (<>
 
         {/* Desktop Nav */}
         <ul className="items-center hidden gap-8 font-medium text-gray-700 text-md md:flex">
@@ -25,14 +47,18 @@ const Navbar = () => {
           <li><a href="#benefits" className="text-black transition hover:text-orange-500">Benefits</a></li>
           <li><a href="#contact" className="text-black transition hover:text-orange-500">Contact</a></li>
         </ul>
+        
 
         {/* Login Button (Desktop) */}
         <a onClick={openLogin} href="#" className="hidden px-4 py-2 text-sm font-semibold text-white transition bg-orange-500 rounded-md md:block hover:bg-orange-600">
           Login
         </a>
+        
         <Modal isOpen={isLoginOpen} onClose={closeLogin}>
         <LoginForm/>
       </Modal>
+      
+      
 
         {/* Hamburger Menu (Mobile) */}
         <button
@@ -41,7 +67,9 @@ const Navbar = () => {
         >
           {menuOpen ? <HiOutlineX /> : <HiOutlineMenuAlt3 />}
         </button>
+        </>)}
       </div>
+      
 
       {/* Mobile Dropdown */}
       <div

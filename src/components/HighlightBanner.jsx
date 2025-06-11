@@ -4,7 +4,7 @@ import Typewriter from 'typewriter-effect'
 const HighlightBanner = () => {
   return (
     <div
-      className="px-4 py-3 text-white shadow-md bg-gradient-to-r from-orange-600 via-orange-300 to-orange-200"
+      className="flex items-center justify-center px-4 py-3 text-white shadow-md bg-gradient-to-r from-orange-600 via-orange-300 to-orange-200"
     >
         <Typewriter
           options={{
