@@ -2,6 +2,8 @@ import { useRegisterUser } from '../hooks/useRegisterUser';
 import { toast } from 'react-toastify';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import { LogIn, ShieldCheck } from 'lucide-react';
+
 
 export default function RegisterForm() {
   const { mutate, isLoading } = useRegisterUser();
@@ -42,7 +44,13 @@ export default function RegisterForm() {
         >
           {() => (
             <Form className="space-y-6">
-              <h2 className="text-3xl font-bold text-center text-gray-800">Create an Account</h2>
+              <div className="flex items-center justify-center mb-4 space-x-2">
+              <ShieldCheck className="text-orange-500" size={40} />
+              <h2 className="flex items-center gap-2 text-3xl font-extrabold text-orange-500">
+                {/* <LogIn size={28} className="text-orange-400" /> */}
+                Create an Account
+              </h2>
+            </div>
 
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
