@@ -22,7 +22,7 @@ const Navbar = () => {
         {/* Logo */}
         <img src={logo} alt="Logo" className="w-16 h-auto md:w-20" />
 
-        {/* {
+        {
             user && (
               <div className='flex gap-6'>
                 <div>
@@ -36,7 +36,7 @@ const Navbar = () => {
               </a>
               </div>
             )
-        }  */}
+        } 
 
         {!user && (<>
 

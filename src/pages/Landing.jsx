@@ -10,14 +10,15 @@ import { AuthContext } from '../auth/authProvider';
 import { useNavigate } from 'react-router-dom';
 
 const Landing = () => {
-    const { user } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
+  
 
   useEffect(() => {
     if (user) {
       navigate(`/${user.role}/dashboard`);
     }
-  }, [user, navigate]);
+  }, [user]);
    
    return <>
       <HighlightBanner />
