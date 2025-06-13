@@ -1,6 +1,7 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useLoginUser } from '../hooks/useLoginUser';
+import { LogIn, ShieldCheck } from 'lucide-react';
 
 export default function LoginForm() {
   const { mutate, isLoading } = useLoginUser();
@@ -28,7 +29,13 @@ export default function LoginForm() {
           onSubmit={onSubmit}
         >
           <Form className="space-y-6">
-            <h2 className="text-3xl font-bold text-center text-gray-800">Welcome Back</h2>
+            <div className="flex items-center justify-center mb-4 space-x-2">
+              <LogIn className="text-orange-500" size={40} />
+              <h2 className="flex items-center gap-2 text-3xl font-extrabold text-orange-500">
+                {/* <LogIn size={28} className="text-orange-400" /> */}
+                Welcome
+              </h2>
+            </div>
 
             <div>
               <Field
