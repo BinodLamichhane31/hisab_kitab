@@ -11,7 +11,7 @@ const AuthContextProvider = ({ children }) => {
     const token = localStorage.getItem("token");
     const storedUser = localStorage.getItem("user");
     if (token && storedUser) {
-      setUser(JSON.parse(storedUser)); // ✅ Fixed: use JSON.parse
+      setUser(JSON.parse(storedUser)); 
     } 
     else{
       navigate("/");
