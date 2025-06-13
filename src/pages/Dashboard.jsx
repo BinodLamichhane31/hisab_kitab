@@ -21,7 +21,7 @@ function Dashboard() {
                     <h1 className="text-3xl font-bold text-gray-800">
                         Welcome, <span className="text-orange-500">{user?.fname}</span>
                     </h1>
-                    <p className="text-gray-500">This is your dashboard panel.</p>
+                    <h2 className='text-gray-500'>{role} Dashboard Panal</h2>
                     <button
                         onClick={handleLogout}
                         className="inline-flex items-center gap-2 px-5 py-2 text-sm font-medium text-white transition bg-orange-500 rounded-lg hover:bg-orange-600"

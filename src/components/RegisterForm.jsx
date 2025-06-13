@@ -33,10 +33,14 @@ export default function RegisterForm() {
       .required('Confirm password is required'),
   });
 
-  const onSubmit = (values) => {
+  const onSubmit = (values,{resetForm}) => {
     const { fname, lname, email, phone, password } = values;
     const payload = { fname, lname, email, phone, password };
-    mutate(payload);
+    mutate(payload, {
+    onSuccess: () => {
+      resetForm(); 
+    },
+  });
   };
 
   return (
