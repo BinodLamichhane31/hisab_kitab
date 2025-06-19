@@ -34,6 +34,7 @@ const Hero = () => {
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.6 }}
         >
+          
           <h1 className="max-w-2xl mb-4 text-4xl font-extrabold leading-none tracking-tight text-black md:text-5xl xl:text-6xl" style={{textAlign:'left'}}>
             Simplify Your Shop's Hisab<span className="text-orange-500">Kitab</span>
           </h1>

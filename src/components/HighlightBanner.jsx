@@ -1,28 +1,42 @@
-import React from 'react'
-import Typewriter from 'typewriter-effect'
+import React from 'react';
+import Typewriter from 'typewriter-effect';
+import { RocketIcon } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const HighlightBanner = () => {
   return (
-    <div
-      className="flex items-center justify-center px-4 py-3 text-white shadow-md bg-gradient-to-r from-orange-600 via-orange-300 to-orange-200"
+    <motion.div
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, ease: 'easeOut' }}
+      className="flex items-center justify-center gap-3 px-6 py-4 text-white bg-gradient-to-r from-orange-600 via-orange-400 to-orange-300"
     >
+      <motion.div
+        animate={{ rotate: [0, 15, -15, 0] }}
+        transition={{ repeat: Infinity, duration: 2 }}
+      >
+        <RocketIcon className="w-6 h-6 text-white" />
+      </motion.div>
+
+      <div className="text-lg font-semibold tracking-wide md:text-xl">
         <Typewriter
           options={{
             strings: [
               'Manage smarter.',
               'Save better.',
               'Grow faster.',
-              'Welcome to HisabKitab'
+              'Welcome to HisabKitab!'
             ],
             autoStart: true,
             loop: true,
-            delay: 50,
-            deleteSpeed: 30,
-            pauseFor: 2000
+            delay: 40,
+            deleteSpeed: 20,
+            pauseFor: 1800
           }}
         />
-    </div>
-  )
-}
+      </div>
+    </motion.div>
+  );
+};
 
-export default HighlightBanner
+export default HighlightBanner;
