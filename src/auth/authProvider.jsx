@@ -1,18 +1,35 @@
-import React, { createContext, useState, useMemo } from 'react';
+import React, { createContext, useState, useCallback } from "react";
 
-export const AuthContext = createContext(null);
+export const AuthContext = createContext({
+  user: null,
+  isAuthenticated: false,
+  isLoading: true, 
+  login: () => {},
+  logout: () => {},
+  setUser: () => {}, 
+});
 
 const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [isAuthLoading, setIsAuthLoading] = useState(true); // To track initial profile fetch
+  const [isLoading, setIsLoading] = useState(true); 
 
-  const contextValue = useMemo(() => ({
+  const login = useCallback((userData) => {
+    setUser(userData);
+  }, []);
+
+  const logout = useCallback(() => {
+    setUser(null);
+  }, []);
+
+  const contextValue = {
     user,
-    setUser,
-    isAuthenticated: user !== null,
-    isAuthLoading,
-    setIsAuthLoading
-  }), [user, isAuthLoading]);
+    isAuthenticated: !!user,
+    isLoading,
+    login,
+    logout,
+    setUser, 
+    setIsLoading,
+  };
 
   return (
     <AuthContext.Provider value={contextValue}>
