@@ -6,19 +6,9 @@ import Benefits from '../components/Benefits';
 import ContactForm from '../components/ContactForm';
 import Footer from '../components/Footer';
 import HighlightBanner from '../components/HighlightBanner';
-import { AuthContext } from '../auth/authProvider';
-import { useNavigate } from 'react-router-dom';
+
 
 const Landing = () => {
-  const { user } = useContext(AuthContext);
-  const navigate = useNavigate();
-  
-
-  useEffect(() => {
-    if (user) {
-      navigate('/dashboard');
-    }
-  }, [user]);
    
    return <>
       <HighlightBanner />

@@ -6,13 +6,17 @@ import AppRouter from './routers/AppRouter.jsx'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Flip, ToastContainer } from 'react-toastify'
 import { BrowserRouter } from 'react-router-dom'
-const qaueryClient = new QueryClient()
+import AuthInitializer from './auth/AuthInitializer.jsx'
+const queryClient = new QueryClient()
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
+          <QueryClientProvider client={queryClient}>
+
     <AuthContextProvider>
-      <QueryClientProvider client={qaueryClient}>
+      <AuthInitializer>
+      
         <AppRouter />
          <ToastContainer
           position='top-center'
@@ -21,8 +25,11 @@ createRoot(document.getElementById('root')).render(
           theme='dark'
           transition={Flip}
         />
-      </QueryClientProvider>
+      </AuthInitializer>
+
     </AuthContextProvider>
+                </QueryClientProvider>
+
     </BrowserRouter>
   
   </React.StrictMode>

@@ -15,12 +15,10 @@ export const useLogoutUser = () => {
     mutationKey: ["logout"],
     onSuccess: (data) => {
       logout(); 
-      queryClient.clear();
+      queryClient.clear(); 
       toast.success(data.message || "Logged out successfully");
       navigate("/")
     },
-    onError: (err) => {
-      toast.error(err.message || "Logout failed");
-    },
+    // ... onError
   });
 };

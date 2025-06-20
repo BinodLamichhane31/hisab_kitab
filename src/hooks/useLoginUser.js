@@ -1,23 +1,35 @@
 import { useMutation } from "@tanstack/react-query";
 import { loginUserService } from "../services/authService";
 import { toast } from "react-toastify";
-import { AuthContext } from "../auth/authProvider.jsx";
 import { useContext } from "react";
+import { useNavigate } from "react-router-dom"; 
+import { AuthContext } from "../auth/authProvider";
 
+export const useLoginUser = (options = {}) => { 
+  const { login } = useContext(AuthContext);
+  const navigate = useNavigate(); 
 
-export const useLoginUser = () =>{
-    const {login} = useContext(AuthContext)
-    return useMutation(
-        {
-            mutationFn: loginUserService,
-            mutationKey: ['login'],
-            onSuccess: (data) => {
-                login(data.data); 
-                toast.success(data.message || "Login Success")
-            },
-            onError: (err) =>{
-                toast.error(err.message || "Login Failure")
-            }
-        }
-    )
-}
+  return useMutation({
+    mutationFn: loginUserService,
+    mutationKey: ['login'],
+    onSuccess: (data) => {
+      const userData = data.data;
+
+      login(userData); 
+      toast.success(data.message || "Login Success");
+
+      if (userData.role === 'admin') {
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/dashboard");
+      }
+
+      if (options.onSuccess) {
+        options.onSuccess();
+      }
+    },
+    onError: (err) => {
+      toast.error(err.message || "Login Failure");
+    }
+  });
+};

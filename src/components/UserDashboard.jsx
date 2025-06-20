@@ -4,7 +4,7 @@ import DashboardLayout from '../layouts/DashboardLayout';
 
 const UserDashboard = () => {
     // Define the navigation links for the standard user
-    const userLinks = [
+    const userLinks = [ 
         { name: 'Dashboard', path: '/user/dashboard', icon: <LayoutDashboard size={20} /> },
         { name: 'Customers', path: '/user/customers', icon: <Users size={20} /> },
         { name: 'Products', path: '/user/products', icon: <Box size={20} /> },

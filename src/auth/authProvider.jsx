@@ -1,36 +1,46 @@
-import React, { createContext, useState, useCallback } from "react";
+// authProvider.jsx - AFTER (IMPROVED)
+
+import React, { createContext, useState, useCallback, useMemo } from "react";
 
 export const AuthContext = createContext({
   user: null,
   isAuthenticated: false,
-  isLoading: true, 
+  isLoading: true,
   login: () => {},
   logout: () => {},
-  setUser: () => {}, 
+  setUser: () => {},
+  setIsLoading: () => {},
 });
 
 const AuthContextProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(true); 
+  const [user, setUserState] = useState(null);
+  const [isLoading, setIsLoadingState] = useState(true);
 
+  const setUser = useCallback((userData) => {
+    setUserState(userData);
+  }, []); 
+
+  const setIsLoading = useCallback((loadingState) => {
+    setIsLoadingState(loadingState);
+  }, []);
+  
   const login = useCallback((userData) => {
-    setUser(userData);
+    setUserState(userData);
   }, []);
 
   const logout = useCallback(() => {
-    setUser(null);
+    setUserState(null);
   }, []);
-
-  const contextValue = {
+  
+  const contextValue = useMemo(() => ({
     user,
     isAuthenticated: !!user,
     isLoading,
     login,
     logout,
-    setUser, 
+    setUser,
     setIsLoading,
-  };
-
+  }), [user, isLoading]); 
   return (
     <AuthContext.Provider value={contextValue}>
       {children}

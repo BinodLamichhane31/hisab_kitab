@@ -1,33 +1,26 @@
-import React, { useContext } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
-import { AuthContext } from '../auth/authProvider';
+import { useContext } from "react";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
+import FullPageLoader from "../components/ui/FullPageLoader";
+import { AuthContext } from "../auth/authProvider";
 
-// A simple loading spinner component (you can style this better)
-const LoadingSpinner = () => (
-    <div className="flex items-center justify-center min-h-screen">
-        <div className="w-16 h-16 border-4 border-orange-500 rounded-full border-t-transparent animate-spin"></div>
-    </div>
-);
+const PrivateRoute = () => {
+  const { isAuthenticated, isLoading } = useContext(AuthContext);
+  const location = useLocation();
+   console.log('[PrivateRoute] Checking route. Context state:', { isLoading, isAuthenticated });
 
-const PrivateRoute = ({ children }) => {
-    const { isAuthenticated, isAuthLoading } = useContext(AuthContext);
-    const location = useLocation();
+  if (isLoading) {
+        console.log('[PrivateRoute] 🛑 Showing Loader because isLoading is TRUE.');
 
-    // 1. While the authentication status is being checked, show a loading indicator.
-    if (isAuthLoading) {
-        return <LoadingSpinner />;
-    }
+    return <FullPageLoader />;
+  }
 
-    // 2. If the loading is finished and the user is NOT authenticated,
-    //    redirect them to the login page. We also pass the current location
-    //    so the user can be redirected back after logging in.
-    if (!isAuthenticated) {
-        return <Navigate to="/" state={{ from: location }} replace />;
-    }
+  if (!isAuthenticated) {
+    return <Navigate to="/" state={{ from: location }} replace />;
+  }
+    console.log('[PrivateRoute] ✅ Access GRANTED. Rendering Outlet.');
 
-    // 3. If loading is finished and the user IS authenticated, render the
-    //    child component (e.g., the DashboardPage).
-    return children;
+
+  return <Outlet />;
 };
 
 export default PrivateRoute;
