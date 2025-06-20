@@ -4,7 +4,7 @@ export const AuthContext = createContext(null);
 
 const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [isAuthLoading, setIsAuthLoading] = useState(true); 
+  const [isAuthLoading, setIsAuthLoading] = useState(true); // To track initial profile fetch
 
   const contextValue = useMemo(() => ({
     user,
