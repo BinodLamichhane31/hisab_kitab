@@ -2,21 +2,22 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Landing from "../pages/Landing";
 import PrivateRoute from "./PrivateRoute";
-import Dashboard from "../pages/Dashboard";
+import Dashboard from "../pages/DashboardPage";
 import NotFound from "../pages/NotFound";
+import DashboardPage from "../pages/DashboardPage";
 
 const AppRouter = () => {
   return (
     <Routes>
       <Route path="/" element={<Landing />} />
       <Route
-        path="/admin/dashboard"
-        element={<PrivateRoute role="admin"><Dashboard /></PrivateRoute>}
-      />
-      <Route
-        path="/user/dashboard"
-        element={<PrivateRoute role="user"><Dashboard /></PrivateRoute>}
-      />
+            path="/dashboard"
+            element={
+              <PrivateRoute> {/* Protect this route from unauthenticated users */}
+                <DashboardPage />
+              </PrivateRoute>
+            }
+          />
       <Route path = "*" element={<NotFound/>}/>
     </Routes>
   );

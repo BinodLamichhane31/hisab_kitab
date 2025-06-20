@@ -2,9 +2,11 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useLoginUser } from '../hooks/useLoginUser';
 import { LogIn, Mail, Lock } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export default function LoginForm() {
   const { mutate, isLoading } = useLoginUser();
+  const navigate = useNavigate()
 
   const initialValues = {
     email: '',

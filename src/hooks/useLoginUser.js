@@ -12,14 +12,12 @@ export const useLoginUser = () =>{
             mutationFn: loginUserService,
             mutationKey: ['login'],
             onSuccess: (data) => {
-                login(data?.data, data?.token); 
+                login(data.data); 
                 toast.success(data.message || "Login Success")
             },
             onError: (err) =>{
                 toast.error(err.message || "Login Failure")
             }
-
-
         }
     )
 }

@@ -1,4 +1,4 @@
-import { loginUserApi, registerUserApi } from "../api/authApi";
+import { loginUserApi, logoutUserApi, registerUserApi } from "../api/authApi";
 
 export const registerUserService = async (formData) =>{
     try {
@@ -21,3 +21,23 @@ export const loginUserService = async (formData) =>{
         
     }
 }
+
+export const logoutUserService = async () =>{
+    try {
+        const response = await logoutUserApi()
+        return response.data
+        
+    } catch (error) {
+        throw error.response?.data || { message: "Logout Failed" };
+    }
+
+}
+
+export const getProfileService = async () => {
+  try {
+    const response = await getProfileApi();
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { message: "Authentication check failed" };
+  }
+};

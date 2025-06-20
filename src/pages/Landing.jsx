@@ -16,7 +16,7 @@ const Landing = () => {
 
   useEffect(() => {
     if (user) {
-      navigate(`/${user.role}/dashboard`);
+      navigate('/dashboard');
     }
   }, [user]);
    

@@ -1,40 +1,21 @@
-import React, { createContext, useState, useEffect, use } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { createContext, useState, useMemo } from 'react';
 
-export const AuthContext = createContext();
+export const AuthContext = createContext(null);
 
 const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const navigate = useNavigate();
+  const [isAuthLoading, setIsAuthLoading] = useState(true); 
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    const storedUser = localStorage.getItem("user");
-    if (token && storedUser) {
-      setUser(JSON.parse(storedUser)); 
-    } 
-    else{
-      navigate("/");
-    }
-    
-  }, []);
-
-  const login = (userData, token) => {
-    localStorage.setItem("token", token);
-    localStorage.setItem("user", JSON.stringify(userData));
-    setUser(userData);
-    navigate(`/${userData.role}/dashboard`);
-  };
-
-  const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setUser(null);
-    navigate('/')
-  };
+  const contextValue = useMemo(() => ({
+    user,
+    setUser,
+    isAuthenticated: user !== null,
+    isAuthLoading,
+    setIsAuthLoading
+  }), [user, isAuthLoading]);
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAuthenticated: user !== null }}>
+    <AuthContext.Provider value={contextValue}>
       {children}
     </AuthContext.Provider>
   );
