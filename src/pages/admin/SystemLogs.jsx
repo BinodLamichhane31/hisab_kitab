@@ -29,8 +29,8 @@ const SystemLogs = () => {
       <div className="mx-auto max-w-7xl">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="flex items-center gap-3 text-3xl font-bold text-gray-800">
-              <FileText size={30} className="text-blue-600"/>
+            <h1 className="flex items-center gap-3 text-3xl text-gray-800 font-regular">
+              <FileText size={30} className="text-orange-500"/>
               System Logs
             </h1>
             <p className="mt-1 text-gray-500">View recent activity and errors across the system.</p>

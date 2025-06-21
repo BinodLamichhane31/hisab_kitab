@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { PlusCircle, Search } from 'lucide-react';
+import { PlusCircle, Search, Users } from 'lucide-react';
 import { useDebounce } from 'use-debounce';
 
 import { useGetAllUsers, useDeleteUserByAdmin } from '../../hooks/admin/useManageUser';
@@ -57,7 +57,10 @@ const UserManagement = () => {
       <div className="p-6">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-3xl font-bold text-gray-800">User Management</h1>
+            <h1 className="flex items-center gap-3 text-3xl text-gray-800 font-regular">
+              <Users size={30} className="text-orange-500"/>
+              User Management
+            </h1>
             <p className="mt-1 text-gray-500">Manage all users in the system.</p>
           </div>
           <button 
