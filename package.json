@@ -27,6 +27,7 @@
     "react-toastify": "^11.0.5",
     "tanstack": "^1.0.0",
     "typewriter-effect": "^2.22.0",
+    "use-debounce": "^10.0.5",
     "yup": "^1.6.1"
   },
   "devDependencies": {

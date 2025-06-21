@@ -21,7 +21,7 @@ export const useGetAllUsers = () =>{
                 sortField,
                 sortOrder
             }),
-            keepPreviousdate: true
+            keepPreviousData: true
         }
     )
     return {
@@ -89,7 +89,7 @@ export const useDeleteUserByAdmin = () =>{
     return useMutation(
         {
             mutationFn:deleteUserByAdminService,
-            mutationKey:['admin_update_user'],
+            mutationKey:['admin_delete_user'],
             onSuccess: () =>{
                 toast.success("User deleted.")
                 queryClient.invalidateQueries("admin_get_users")
