@@ -1,5 +1,5 @@
-import { useState } from 'react'; 
 import { PlusCircle } from 'lucide-react';
+
 
 const UserManagement = () => {
   return (
@@ -22,7 +22,6 @@ const UserManagement = () => {
           className="w-full p-2 mb-4 border border-gray-300 rounded-md"
         />
         <div className="py-8 text-center text-gray-500">
-          User data table will be displayed here.
         </div>
       </div>
     </div>

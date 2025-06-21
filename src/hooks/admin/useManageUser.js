@@ -1,59 +1,8 @@
-
-// export const getAllUsersService = async (params) => {
-//     try {
-//         const response = await getAllUsersApi(params)
-//         return response.data
-
-import { useQuery } from "@tanstack/react-query"
-import { getAllUsersService } from "../../services/admin/userManagementService"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { createUserService, deleteUserByAdminService, getAllUsersService, getUserByIdService, toggleUserStatusService, updateUserByAdminService } from "../../services/admin/userManagementService"
 import { useState } from "react"
+import { toast } from "react-toastify";
 
-        
-//     } catch (error) {
-//         throw error.response?.data?.message || {message:"Failed to fetch users."}
-//     }
-// }
-// export const createUserService = async (data) =>{
-//     try {
-//         const response = await createUserApi(data)
-//         return response.data
-//     } catch (error) {
-//         throw error.response?.data?.message || {message:"Failed to create user." }
-//     }
-// }
-// export const getUserByIdService = async (id) =>{
-//     try {
-//         const response = await getUserByIdApi(id)
-//         return response.data
-//     } catch (error) {
-//         throw error.response?.data?.message || {message:"Failed to get user by id."}
-        
-//     }
-// }
-// export const updateUserByAdminService = async(id, data) =>{
-//    try {
-//      const response = await updateUserByAdminApi(id,data)
-//      return response.data
-//    } catch (error) {
-//         throw error.response?.data.message || {message:"User update failed."}
-//    }
-// }
-// export const deleteUserByAdminService = async(id) =>{
-//    try {
-//      const response = await deleteUserByAdminApi(id)
-//      return response.data
-//    } catch (error) {
-//         throw error.response?.data.message || {message:"User deletion failed."}
-//    }
-// }
-// export const toggleUserStatusService = async(id) =>{
-//    try {
-//      const response = await toggleUserStatusApi(id)
-//      return response.data
-//    } catch (error) {
-//         throw error.response?.data.message || {message:"Failed to toggle user status."}
-//    }
-// }
 
 export const useGetAllUsers = () =>{
     const [pageNumber,setPageNumber] = useState(1);
@@ -86,6 +35,87 @@ export const useGetAllUsers = () =>{
         sortField,
         setSortField,
         sortOrder,
-        setSortField
+        setSortOrder
     }
+}
+
+export const useCreateUser = () =>{
+    const queryClient = useQueryClient()
+    return useMutation(
+        {
+            mutationKey:['admin_create_user'],
+            mutationFn: createUserService,
+            onSuccess: () =>{
+                queryClient.invalidateQueries("admin_get_users")
+            }
+        }
+    )
+}
+
+export const useGetUserById = (id) =>{
+    const query = useQuery({
+        queryKey:['admin_get_user_by_id',id],
+        queryFn: () => getUserByIdService(id),
+        enabled: !!id,
+        retry: false
+    })
+    const user = query.data?.data || {}
+    return {
+        ...query,
+        user
+    }
+}
+
+export const useUpdateUserByAdmin = () =>{
+    const queryClient = useQueryClient()
+    return useMutation(
+        {
+            mutationFn:({id,data}) => updateUserByAdminService(id,data),
+            mutationKey:['admin_update_user'],
+            onSuccess: () =>{
+                toast.success("User updated.")
+                queryClient.invalidateQueries("admin_get_users","admin_get_user_by_id")
+            },
+            onError: (error)=>{
+                toast(error.message || "Failed to update user.")
+            }
+        }
+    )
+
+}
+
+export const useDeleteUserByAdmin = () =>{
+    const queryClient = useQueryClient()
+    return useMutation(
+        {
+            mutationFn:deleteUserByAdminService,
+            mutationKey:['admin_update_user'],
+            onSuccess: () =>{
+                toast.success("User deleted.")
+                queryClient.invalidateQueries("admin_get_users")
+            },
+            onError: (error)=>{
+                toast(error.message || "Failed to delete user.")
+            }
+        }
+    )
+
+}
+
+export const useToggleUserStatus = () =>{
+    const queryClient = useQueryClient()
+    return useMutation(
+        {
+            mutationFn:toggleUserStatusService,
+            mutationKey:['admin_toggle_user_status'],
+            onSuccess: () =>{
+                toast.success("User status changed.")
+                queryClient.invalidateQueries("admin_get_users")
+            },
+            onError: (error)=>{
+                toast(error.message || "Failed to change user status.")
+            }
+        }
+    )
+
 }
