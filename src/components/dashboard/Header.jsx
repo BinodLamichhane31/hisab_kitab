@@ -25,13 +25,13 @@ const Header = () => {
   };
 
   return (
-    <header className="flex items-center justify-end p-4 bg-white shadow-sm">
+    <header className="flex items-center justify-end p-4 shadow-sm bg-gray-50">
       <div className="relative" ref={dropdownRef}>
         <button
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           className="flex items-center p-2 space-x-2 transition rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
         >
-          <div className="flex items-center justify-center w-8 h-8 font-bold text-white bg-blue-500 rounded-full">
+          <div className="flex items-center justify-center w-8 h-8 font-bold text-white bg-orange-500 rounded-full">
             {user?.fname?.charAt(0).toUpperCase()}
           </div>
           <span className="hidden font-medium text-gray-700 md:block">

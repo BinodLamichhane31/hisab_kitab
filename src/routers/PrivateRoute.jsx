@@ -6,10 +6,8 @@ import { AuthContext } from "../auth/authProvider";
 const PrivateRoute = () => {
   const { isAuthenticated, isLoading } = useContext(AuthContext);
   const location = useLocation();
-   console.log('[PrivateRoute] Checking route. Context state:', { isLoading, isAuthenticated });
 
   if (isLoading) {
-        console.log('[PrivateRoute] 🛑 Showing Loader because isLoading is TRUE.');
 
     return <FullPageLoader />;
   }
@@ -17,7 +15,6 @@ const PrivateRoute = () => {
   if (!isAuthenticated) {
     return <Navigate to="/" state={{ from: location }} replace />;
   }
-    console.log('[PrivateRoute] ✅ Access GRANTED. Rendering Outlet.');
 
 
   return <Outlet />;
