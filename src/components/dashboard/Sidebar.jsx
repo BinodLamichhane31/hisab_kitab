@@ -57,6 +57,10 @@ const Sidebar = () => {
               <UserCog size={20} className="mr-3" />
               User Management
             </NavLink>
+            <NavLink to="/admin/system-logs" className={navLinkClasses}>
+              <UserCog size={20} className="mr-3" />
+              System Logs
+            </NavLink>
           </div>
         )}
       </nav>

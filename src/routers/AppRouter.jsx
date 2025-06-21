@@ -12,6 +12,7 @@ import UserManagement from "../pages/admin/UserManagement";
 import NotFound from "../pages/NotFound";
 import { AuthContext } from "../auth/authProvider";
 import { useContext } from "react";
+import SystemLogsPage from "../pages/admin/SystemLogs";
 
 function HomeRedirect() {
   const { user } = useContext(AuthContext);
@@ -59,6 +60,7 @@ function App() {
         <Route element={<DashboardLayout />}> {/* Can reuse the same layout */}
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/users" element={<UserManagement />} />
+          <Route path="/admin/system-logs" element={<SystemLogsPage />} />
         </Route>
       </Route>
 

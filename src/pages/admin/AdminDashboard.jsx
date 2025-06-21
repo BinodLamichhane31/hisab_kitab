@@ -1,3 +1,5 @@
+import SystemLogsTable from "../../components/admin/SystemLogsTable";
+
 const AdminDashboard = () => {
   return (
     <div>
