@@ -46,6 +46,7 @@ export const useCreateUser = () =>{
             mutationKey:['admin_create_user'],
             mutationFn: createUserService,
             onSuccess: () =>{
+                toast.success("User added.")
                 queryClient.invalidateQueries("admin_get_users")
             }
         }

@@ -13,8 +13,9 @@ export const useLoginUser = (options = {}) => {
     mutationFn: loginUserService,
     mutationKey: ['login'],
     onSuccess: (data) => {
-      const userData = data.data;
+        console.log("Login Response:", data); 
 
+      const userData = data.data;
       login(userData); 
       toast.success(data.message || "Login Success");
 

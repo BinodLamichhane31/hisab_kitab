@@ -7,7 +7,8 @@ import {
   Truck,
   ShieldCheck,
   UserCog,
-  BookCopy
+  BookCopy,
+  Logs
 } from 'lucide-react';
 import { AuthContext } from '../../auth/authProvider';
 import logo from '../../assets/logo.png';
@@ -58,7 +59,7 @@ const Sidebar = () => {
               User Management
             </NavLink>
             <NavLink to="/admin/system-logs" className={navLinkClasses}>
-              <UserCog size={20} className="mr-3" />
+              <Logs size={20} className="mr-3" />
               System Logs
             </NavLink>
           </div>

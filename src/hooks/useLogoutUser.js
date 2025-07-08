@@ -7,18 +7,21 @@ import { useNavigate } from "react-router-dom";
 
 export const useLogoutUser = () => {
   const { logout } = useContext(AuthContext);
-  const queryClient = useQueryClient()
-  const navigate = useNavigate()
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   return useMutation({
     mutationFn: logoutUserService,
     mutationKey: ["logout"],
     onSuccess: (data) => {
-      logout(); 
-      queryClient.clear(); 
       toast.success(data.message || "Logged out successfully");
-      navigate("/")
+      logout(); 
+      queryClient.setQueryData(['profile'], null);
+      queryClient.removeQueries(); 
+      navigate("/", { replace: true });
     },
-    // ... onError
+    onError: (error) => {
+        toast.error(error.response?.data?.message || "Logout failed. Please try again.");
+    }
   });
 };

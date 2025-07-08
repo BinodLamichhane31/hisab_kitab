@@ -4,6 +4,7 @@ import { HiOutlineMenuAlt3, HiOutlineX } from 'react-icons/hi';
 import Modal from './Modal';
 import LoginForm from './LoginForm';
 import { AuthContext } from '../auth/authProvider';
+import { Link } from 'react-router-dom';
 
 
 const Navbar = () => {
@@ -14,6 +15,8 @@ const Navbar = () => {
   const closeLogin = useCallback(() => setLoginOpen(false), []);
 
   const { user, logout } = useContext(AuthContext);
+
+  
 
 
   return (
@@ -31,9 +34,9 @@ const Navbar = () => {
                 </div>
               
 
-              <a onClick={logout} className="hidden px-4 py-2 text-sm font-semibold text-white transition bg-orange-500 rounded-md md:block hover:bg-orange-600">
+              <Link onClick={logout} className="hidden px-4 py-2 text-sm font-semibold text-white transition bg-orange-500 rounded-md md:block hover:bg-orange-600">
                 Logout
-              </a>
+              </Link>
               </div>
             )
         } 
