@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query"; // useMutation for (POST/UPDATE/PATCH/DELETE)
-import { registerUserService } from "../services/authService";
+import { registerUserService } from "../../services/authService";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 

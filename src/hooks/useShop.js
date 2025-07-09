@@ -1,6 +1,6 @@
 import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { createShopService, deleteShopService, getShopByIdService, getShopsService, selectActiveShopService, updateShopService } from "../../services/shopService";
+import { createShopService, deleteShopService, getShopByIdService, getShopsService, selectActiveShopService, updateShopService } from "../services/shopService";
 import { data } from "react-router-dom";
 
 export const useCreateShop = () =>{

@@ -1,9 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
-import { loginUserService } from "../services/authService";
+import { loginUserService } from "../../services/authService";
 import { toast } from "react-toastify";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom"; 
-import { AuthContext } from "../auth/authProvider";
+import { AuthContext } from "../../auth/authProvider";
 
 export const useLoginUser = (options = {}) => { 
   const { login } = useContext(AuthContext);
