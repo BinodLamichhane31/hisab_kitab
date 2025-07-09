@@ -15,7 +15,7 @@ export const useLoginUser = (options = {}) => {
     onSuccess: (data) => {
         console.log("Login Response:", data); 
 
-      const userData = data.data;
+      const userData = data.data.user;
       login(userData); 
       toast.success(data.message || "Login Success");
 

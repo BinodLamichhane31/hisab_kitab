@@ -9,7 +9,7 @@ export const createShopService = async(formData) =>{
     }
 }
 
-export const  getShopService = async () =>{
+export const  getShopsService = async () =>{
     try {
         const response = await getShopsApi()
         return response
