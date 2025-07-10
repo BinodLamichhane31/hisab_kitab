@@ -1,6 +1,8 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import Sidebar from "../components/dashboard/Sidebar"; 
 import Header from "../components/dashboard/Header";  
+import { useContext } from "react";
+import { AuthContext } from "../auth/authProvider";
 
 const DashboardLayout = () => {
   return (

@@ -14,6 +14,7 @@ import { AuthContext } from "../auth/authProvider";
 import { useContext } from "react";
 import SystemLogsPage from "../pages/admin/SystemLogs";
 import FullPageLoader from "../components/ui/FullPageLoader"; 
+import CreateFirstShop from "../pages/user/CreateFirstShop";
 
 
 
@@ -37,13 +38,17 @@ function AppRouter() {
       />
 
       {/* ---------------- PRIVATE USER ROUTES ---------------- */}
-      <Route element={<PrivateRoute />}>
+       <Route element={<PrivateRoute />}>
+        {/* Routes WITH the Dashboard Layout */}
         <Route element={<DashboardLayout />}>
           <Route path="/dashboard" element={<UserDashboard />} />
           <Route path="/customers" element={<CustomerManagement />} />
           <Route path="/products" element={<ProductManagement />} />
           <Route path="/suppliers" element={<SupplierManagement />} />
         </Route>
+
+        {/* Route WITHOUT the Dashboard Layout (but still private) */}
+        <Route path="/create-first-shop" element={<CreateFirstShop />} />
       </Route>
 
 

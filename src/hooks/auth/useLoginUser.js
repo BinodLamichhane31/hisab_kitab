@@ -1,36 +1,42 @@
+// hooks/auth/useLoginUser.js
 import { useMutation } from "@tanstack/react-query";
-import { loginUserService } from "../../services/authService";
 import { toast } from "react-toastify";
 import { useContext } from "react";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../auth/authProvider";
+import { loginUserService } from "../../services/authService";
 
-export const useLoginUser = (options = {}) => { 
+export const useLoginUser = (options = {}) => {
   const { login } = useContext(AuthContext);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   return useMutation({
     mutationFn: loginUserService,
     mutationKey: ['login'],
     onSuccess: (data) => {
-        console.log("Login Response:", data); 
+      // The 'data' here is the full response from your API
+      const { user, shops } = data.data;
+      console.log("Login Data:",data);
+      
 
-      const userData = data.data.user;
-      login(userData); 
+      // The new login function takes the whole payload
+      login(data);
       toast.success(data.message || "Login Success");
 
-      if (userData.role === 'admin') {
+      // *** NEW NAVIGATION LOGIC ***
+      if (user.role === 'admin') {
         navigate("/admin/dashboard");
-      } else {
+      } else if (shops && shops.length > 0) {
         navigate("/dashboard");
-      }
-
-      if (options.onSuccess) {
-        options.onSuccess();
+      } else {
+        console.log("Create Shop");
+        
+        // User has no shops, prompt them to create one
+        navigate("/create-first-shop");
       }
     },
     onError: (err) => {
-      toast.error(err.message || "Login Failure");
+      toast.error(err.response?.data?.message || err.message || "Login Failure");
     }
   });
 };

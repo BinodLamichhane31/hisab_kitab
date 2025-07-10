@@ -1,7 +1,8 @@
 import { useContext, useState, useRef, useEffect } from "react";
-import { useLogoutUser } from "../../hooks/useLogoutUser";
+import { useLogoutUser } from "../../hooks/auth/useLogoutUser";
 import { ChevronDown, LogOut, User } from "lucide-react";
 import { AuthContext } from "../../auth/authProvider";
+import ShopSwitcher from "./ShopSwitcher";
 
 const Header = () => {
   const { user } = useContext(AuthContext);
@@ -26,6 +27,8 @@ const Header = () => {
 
   return (
     <header className="flex items-center justify-end p-4 shadow-sm bg-gray-50">
+            {user?.role !== 'admin' && <ShopSwitcher />}
+
       <div className="relative" ref={dropdownRef}>
         <button
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}

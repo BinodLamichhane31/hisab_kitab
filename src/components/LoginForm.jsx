@@ -1,6 +1,6 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { useLoginUser } from '../hooks/useLoginUser';
+import { useLoginUser } from '../hooks/auth/useLoginUser';
 import { LogIn, Mail, Lock } from 'lucide-react';
 
 export default function LoginForm() {
