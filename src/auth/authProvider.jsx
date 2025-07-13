@@ -12,6 +12,7 @@ const AuthContextProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const queryClient = useQueryClient();
 
+
     const login = (loginData) => {
         setLoading(true);
         console.log("Context:",loginData);
@@ -54,7 +55,7 @@ const AuthContextProvider = ({ children }) => {
             const newShop = shops.find(s => s._id === shopId);
             if(newShop) {
                 setCurrentShop(newShop);
-                localStorage.setItem("currentShop", JSON.stringify(newShop)); // Persist the new current shop
+                localStorage.setItem("currentShop", JSON.stringify(newShop)); 
             }
 
             await selectActiveShopService(shopId); 
@@ -62,7 +63,6 @@ const AuthContextProvider = ({ children }) => {
             await queryClient.invalidateQueries({ queryKey: ['customers'] });
             await queryClient.invalidateQueries({ queryKey: ['products'] });
             await queryClient.invalidateQueries({ queryKey: ['suppliers'] });
-            // Add any other shop-specific data keys here
 
         } catch (error) {
             console.error("Failed to switch shop", error);

@@ -27,7 +27,6 @@ export const useGetShops = () =>{
             queryFn: getShopsService,
             select: (res) => res.data.data,
             retry: false,
-            onSuccess:(data)=>{toast.success(data.message || "fasdfsdf")}
         }
     )
 }
@@ -83,7 +82,7 @@ export const useSelectActiveShop = async () => {
         {
             mutationFn: (shopId) => selectActiveShopService(shopId),
             onSuccess: (data) =>{
-                toast.success(data.message || "Shop switched successfully.")
+                toast.success(data?.message || "Shop switched successfully.")
             },
             onError: (error) =>{
                 toast.error(error.message || "Failed to switch shop.")
