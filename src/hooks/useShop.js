@@ -26,7 +26,8 @@ export const useGetShops = () =>{
             queryKey:['shops'],
             queryFn: getShopsService,
             select: (res) => res.data.data,
-            retry: false
+            retry: false,
+            onSuccess:(data)=>{toast.success(data.message || "fasdfsdf")}
         }
     )
 }

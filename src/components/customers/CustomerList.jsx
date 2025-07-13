@@ -1,12 +1,10 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGetCustomersByShop } from '../../hooks/useCustomer';
 import { AuthContext } from '../../auth/authProvider';
-// Swapping to Lucide for a consistent, cooler icon set
-import { Search, Plus, Loader2, Users } from 'lucide-react'; 
+import { Search, Plus, Loader2, Users } from 'lucide-react';
 import AddCustomerModal from './AddCustomerModal';
 
-// A small helper to get initials from a name
 const getInitials = (name) => {
   if (!name) return '?';
   const names = name.split(' ');
@@ -20,13 +18,20 @@ const CustomerList = () => {
   const navigate = useNavigate();
   const { customerId: activeCustomerId } = useParams();
   
-  const { user } = useContext(AuthContext);
-  const shopId = user?.activeShop;
+  const { currentShop } = useContext(AuthContext);
+  const shopId = currentShop?._id;
   
   const { data: customers, isLoading, isError } = useGetCustomersByShop({
     shopId: shopId,
     search: searchTerm,
   });
+
+  useEffect(() => {
+    if (activeCustomerId) {
+      navigate('/customers');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shopId]);
   
   const handleCustomerClick = (id) => {
     navigate(`/customers/${id}`);
@@ -36,7 +41,7 @@ const CustomerList = () => {
     <>
       <div className="flex flex-col h-full bg-white border-r border-gray-200">
         
-        <div className="p-3 pt-6 border-b border-gray-200">
+        <div className="p-3 border-b border-gray-200">
           <div className="flex items-center gap-2">
             <div className="relative flex-1">
               <Search className="absolute w-4 h-4 text-gray-400 transform -translate-y-1/2 top-1/2 left-3" />
@@ -58,7 +63,6 @@ const CustomerList = () => {
           </div>
         </div>
 
-        {/* Customer List Area */}
         <div className="flex-1 overflow-y-auto">
           {isLoading && (
             <div className="flex items-center justify-center h-full text-gray-400">
@@ -78,6 +82,7 @@ const CustomerList = () => {
             </div>
           )}
           <ul>
+            {/* THIS BLOCK IS NOW CORRECT */}
             {customers?.map((customer) => {
               const isActive = customer._id === activeCustomerId;
               return (
