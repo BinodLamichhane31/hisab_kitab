@@ -1,49 +1,103 @@
-// components/dashboard/ShopSwitcher.jsx
-import { useContext } from "react";
-import { Store, ChevronsUpDown } from "lucide-react";
+import { useContext, useState, useEffect, useRef } from "react";
+import { Store, ChevronDown, Check, LogOut } from "lucide-react";
 import { AuthContext } from "../../auth/authProvider";
 
 const ShopSwitcher = () => {
   const { shops, currentShop, switchShop, loading } = useContext(AuthContext);
+  const [isOpen, setIsOpen] = useState(false);
+  const switcherRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (switcherRef.current && !switcherRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [switcherRef]);
 
   if (loading || !currentShop) {
-    // Show a loading or placeholder state
     return (
-      <div className="flex items-center p-2 text-sm text-gray-500 bg-gray-200 rounded-md animate-pulse">
-        <Store className="mr-2" size={20} />
-        <span>Loading Shop...</span>
+      <div className="flex items-center w-full max-w-xs p-2 space-x-3 rounded-lg animate-pulse">
+        <div className="w-10 h-10 bg-gray-200 rounded-lg"></div>
+        <div className="flex-1 space-y-2">
+          <div className="w-3/4 h-4 bg-gray-300 rounded"></div>
+          <div className="w-1/2 h-3 bg-gray-300 rounded"></div>
+        </div>
+
       </div>
     );
   }
 
   if (shops.length === 0) {
-    // This case should ideally not be reached if navigation logic is correct, but it's a good fallback.
-    return null;
+    return (
+      <div className="flex items-center w-full max-w-xs p-2 text-sm text-gray-500">
+        <Store className="mr-2" size={18} />
+        <span>No shops found.</span>
+      </div>
+    );
   }
 
-  const handleShopChange = (e) => {
-    const newShopId = e.target.value;
-    if (newShopId !== currentShop._id) {
-      switchShop(newShopId);
+  const handleSelectShop = (shopId) => {
+    if (shopId !== currentShop._id) {
+      switchShop(shopId);
     }
+    setIsOpen(false);
   };
 
   return (
-    <div className="relative flex items-center mr-4">
-      <Store className="absolute text-gray-500 left-3" size={20} />
-      <select
-        value={currentShop._id}
-        onChange={handleShopChange}
-        className="w-full max-w-xs py-2 pl-10 pr-8 font-semibold text-gray-800 bg-white border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-2 focus:ring-orange-500"
-        aria-label="Select a shop"
+    <div ref={switcherRef} className="relative w-full max-w-xs">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center w-full p-2 text-left transition-colors duration-200 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-orange-400"
+        aria-haspopup="listbox"
+        aria-expanded={isOpen}
       >
-        {shops.map((shop) => (
-          <option key={shop._id} value={shop._id}>
-            {shop.name}
-          </option>
-        ))}
-      </select>
-      <ChevronsUpDown className="absolute text-gray-500 pointer-events-none right-3" size={20} />
+        <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 mr-3 text-orange-600 bg-orange-100 rounded-lg">
+          <Store size={20} />
+        </div>
+        
+        <div className="flex items-center flex-1 min-w-0">
+          <div className="flex-1">
+            <p className="text-sm font-bold text-gray-800 truncate">{currentShop.name}</p>
+            <p className="text-xs text-gray-500">Current Shop</p>
+          </div>
+          <ChevronDown
+            size={16}
+            className={`ml-1 text-gray-500 transition-transform duration-200 ${
+              isOpen ? "rotate-180" : ""
+            }`}
+          />
+        </div>
+      </button>
+
+      {isOpen && (
+        <div
+          className="absolute z-10 w-full p-1 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl"
+          role="listbox"
+        >
+          <ul>
+            {shops.map((shop) => (
+              <li key={shop._id}>
+                <button
+                  onClick={() => handleSelectShop(shop._id)}
+                  className="flex items-center w-full px-3 py-2 text-sm text-left text-gray-700 rounded-md hover:bg-orange-50 hover:text-orange-600"
+                  role="option"
+                  aria-selected={shop._id === currentShop._id}
+                >
+                  <span className="flex-1 truncate">{shop.name}</span>
+                  {shop._id === currentShop._id && (
+                    <Check size={16} className="ml-2 text-orange-500" />
+                  )}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };

@@ -9,9 +9,8 @@ const DashboardLayout = () => {
     <div className="flex h-screen bg-gray-100">
       <Sidebar />
       <div className="flex flex-col flex-1 overflow-hidden">
-        <Header />
-        <main className="flex-1 p-6 overflow-x-hidden overflow-y-auto bg-gray-100">
-          <Outlet /> {/* Child routes will be rendered here */}
+        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
+          <Outlet /> 
         </main>
       </div>
     </div>

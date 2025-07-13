@@ -12,6 +12,7 @@ const CreateFirstShop = () => {
     onSuccess: () => {
       // A full page reload might be easiest to refresh all state including AuthContext
       window.location.href = '/dashboard'; 
+      navigate('/dashboard')
     }
   });
 

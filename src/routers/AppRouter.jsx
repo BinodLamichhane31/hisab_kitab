@@ -4,8 +4,7 @@ import PrivateRoute from "./PrivateRoute";
 import AdminRoute from "./AdminRoute";
 import LandingPage from "../pages/Landing";
 import UserDashboard from "../pages/user/DashboardPage";
-import CustomerManagement from "../pages/user/CustomerManagement";
-import ProductManagement from "../pages/user/ProductManagement";
+import CustomerManagementPage from "../pages/user/CustomerManagementPage";
 import SupplierManagement from "../pages/user/SupplierManagement";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import UserManagement from "../pages/admin/UserManagement";
@@ -42,8 +41,9 @@ function AppRouter() {
         {/* Routes WITH the Dashboard Layout */}
         <Route element={<DashboardLayout />}>
           <Route path="/dashboard" element={<UserDashboard />} />
-          <Route path="/customers" element={<CustomerManagement />} />
-          <Route path="/products" element={<ProductManagement />} />
+          <Route path="/customers" element={<CustomerManagementPage />} />
+          <Route path="/customers/:customerId" element={<CustomerManagementPage />} />
+          <Route path="/products" element={<SupplierManagement />} />
           <Route path="/suppliers" element={<SupplierManagement />} />
         </Route>
 
