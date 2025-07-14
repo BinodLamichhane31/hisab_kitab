@@ -30,7 +30,6 @@ const CustomerList = () => {
     if (activeCustomerId) {
       navigate('/customers');
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shopId]);
   
   const handleCustomerClick = (id) => {

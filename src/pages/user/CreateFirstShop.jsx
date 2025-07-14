@@ -8,9 +8,7 @@ import { Building } from 'lucide-react';
 const CreateFirstShop = () => {
   const navigate = useNavigate();
   const { mutate: createShop, isLoading } = useCreateShop({
-    // Add an onSuccess callback to the hook options
     onSuccess: () => {
-      // A full page reload might be easiest to refresh all state including AuthContext
       window.location.href = '/dashboard'; 
       navigate('/dashboard')
     }
@@ -39,7 +37,6 @@ const CreateFirstShop = () => {
               <Field name="name" type="text" className="w-full mt-1 input-class" />
               <ErrorMessage name="name" component="div" className="text-red-500" />
             </div>
-             {/* Add other fields as needed */}
             <button type="submit" disabled={isLoading} className="w-full btn-primary">
               {isLoading ? 'Creating...' : 'Create Shop and Continue'}
             </button>
