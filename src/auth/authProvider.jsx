@@ -1,103 +1,102 @@
-// src/auth/authProvider.js
-import { createContext, useState, useEffect, useCallback } from "react";
+import { createContext, useState, useEffect, useCallback, useMemo } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { selectActiveShopService } from "../services/shopService";
+import { useGetShops, useSelectActiveShop } from "../hooks/useShop";
 
 export const AuthContext = createContext();
 
 const AuthContextProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const [shops, setShops] = useState([]);
-    const [currentShop, setCurrentShop] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [authLoading, setAuthLoading] = useState(true); 
+    
+    const [currentShopId, setCurrentShopId] = useState(() => 
+        localStorage.getItem("currentShopId")
+    );
+
     const queryClient = useQueryClient();
+    const { data: shops, isLoading: shopsLoading } = useGetShops();
+
+    const { mutate: switchShopMutation } = useSelectActiveShop();
+
+    const currentShop = useMemo(() => {
+        if (shops && currentShopId) {
+            return shops.find(s => s._id === currentShopId);
+        }
+        return shops?.[0] || null;
+    }, [shops, currentShopId]);
+    
+    useEffect(() => {
+        if (!currentShopId && shops?.length > 0) {
+            setCurrentShopId(shops[0]._id);
+        }
+    }, [shops, currentShopId]);
 
 
-    const login = (loginData) => {
-        setLoading(true);
-        console.log("Context:",loginData);
+    const login = useCallback((loginData) => {
         const { data, token } = loginData;
-        const { user: userData, shops: userShops, currentShopId } = data;
-        
+        const { user: userData, currentShopId: initialShopId } = data;
+
         localStorage.setItem("user", JSON.stringify(userData));
         localStorage.setItem("token", token);
-        localStorage.setItem("shops", JSON.stringify(userShops || []));
-
         setUser(userData);
-        setShops(userShops || []);
 
-        if (currentShopId && userShops?.length > 0) {
-            const activeShop = userShops.find(s => s._id === currentShopId);
-            setCurrentShop(activeShop);
-            localStorage.setItem("currentShop", JSON.stringify(activeShop)); 
-        } else {
-            setCurrentShop(null);
-            localStorage.removeItem("currentShop"); 
+        if (initialShopId) {
+            localStorage.setItem("currentShopId", initialShopId);
+            setCurrentShopId(initialShopId);
         }
-        setLoading(false);
-    };
+        
+        queryClient.invalidateQueries({ queryKey: ['shops'] });
+    }, [queryClient]);
 
-    const logout = () => {
-        setLoading(true);
+    const logout = useCallback(() => {
         localStorage.removeItem("user");
         localStorage.removeItem("token");
-        localStorage.removeItem("shops"); 
-        localStorage.removeItem("currentShop"); 
+        localStorage.removeItem("currentShopId");
+        
         setUser(null);
-        setShops([]);
-        setCurrentShop(null);
-        queryClient.clear(); 
-        setLoading(false);
-    };
+        setCurrentShopId(null);
 
-    const switchShop = async (shopId) => {
-        try {
-            const newShop = shops.find(s => s._id === shopId);
-            if(newShop) {
-                setCurrentShop(newShop);
-                localStorage.setItem("currentShop", JSON.stringify(newShop)); 
+        queryClient.clear();
+    }, [queryClient]);
+
+    const switchShop = useCallback(async (shopId) => {
+        setCurrentShopId(shopId);
+        localStorage.setItem("currentShopId", shopId);
+        
+        switchShopMutation(shopId, {
+            onSuccess: () => {
+                queryClient.invalidateQueries({ queryKey: ['customers'] });
+                queryClient.invalidateQueries({ queryKey: ['products'] });
+                queryClient.invalidateQueries({ queryKey: ['suppliers'] });
+            },
+            onError: () => {
+                const previousShopId = currentShop?._id || null;
+                setCurrentShopId(previousShopId);
+                if (previousShopId) {
+                    localStorage.setItem("currentShopId", previousShopId);
+                } else {
+                    localStorage.removeItem("currentShopId");
+                }
             }
-
-            await selectActiveShopService(shopId); 
-            
-            await queryClient.invalidateQueries({ queryKey: ['customers'] });
-            await queryClient.invalidateQueries({ queryKey: ['products'] });
-            await queryClient.invalidateQueries({ queryKey: ['suppliers'] });
-
-        } catch (error) {
-            console.error("Failed to switch shop", error);
-            const storedCurrentShop = localStorage.getItem("currentShop");
-            if (storedCurrentShop) {
-                setCurrentShop(JSON.parse(storedCurrentShop));
-            } else {
-                setCurrentShop(null);
-            }
-        }
-    };
+        });
+    }, [queryClient, switchShopMutation, currentShop]);
     
     useEffect(() => {
         const token = localStorage.getItem("token");
         const storedUser = localStorage.getItem("user");
-        const storedShops = localStorage.getItem("shops"); 
-        const storedCurrentShop = localStorage.getItem("currentShop"); 
 
         if (token && storedUser) {
             setUser(JSON.parse(storedUser));
-            if (storedShops) {
-                setShops(JSON.parse(storedShops));
-            }
-            if (storedCurrentShop) {
-                setCurrentShop(JSON.parse(storedCurrentShop));
-            }
         }
-        setLoading(false);
+        setAuthLoading(false);
     }, []); 
+
+    const loading = authLoading || (!!user && shopsLoading);
 
     return (
         <AuthContext.Provider
             value={{
                 user,
-                shops,
+                shops: shops || [], 
                 currentShop,
                 loading,
                 login,
