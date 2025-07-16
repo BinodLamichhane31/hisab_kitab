@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useGetSuppliersByShop } from '../../hooks/useSupplier';
 import { AuthContext } from '../../auth/authProvider';
 import { Search, Plus, Loader2, Users } from 'lucide-react';
+import AddSupplierModal from './AddSupplierModal';
 
 const getInitials = (name) => {
   if (!name) return '?';
@@ -109,7 +110,12 @@ const SupplierList = () => {
         </div>
       </div>
 
-    
+      {isModalOpen && (
+        <AddSupplierModal
+          shopId={shopId}
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
     </>
   );
 };
