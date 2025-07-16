@@ -77,12 +77,12 @@ export const useDeleteShop = async() =>{
     )
 }
 
-export const useSelectActiveShop = async () => {
+export const useSelectActiveShop = () => {
     return useMutation(
         {
             mutationFn: (shopId) => selectActiveShopService(shopId),
             onSuccess: (data) =>{
-                toast.success(data?.message || "Shop switched successfully.")
+                toast.success(data.data.message || "Shop switched successfully 11.")
             },
             onError: (error) =>{
                 toast.error(error.message || "Failed to switch shop.")

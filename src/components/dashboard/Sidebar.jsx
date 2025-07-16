@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard,
@@ -16,6 +16,8 @@ import { AuthContext } from '../../auth/authProvider';
 import ShopSwitcher from './ShopSwitcher'; //
 import { HiPlus } from 'react-icons/hi';
 import { MdAddShoppingCart } from 'react-icons/md';
+import AddCustomerModal from '../customers/AddCustomerModal';
+import AddShopModal from '../shop/AddShopModal';
 
 const ProfileSection = ({ user, logout }) => (
   <div className="p-2 pt-4 mt-auto border-t border-gray-200">
@@ -62,6 +64,8 @@ const Sidebar = () => {
     { to: "/admin/system-logs", label: "System Logs", icon: Logs },
   ];
 
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
   return (
     <aside className="sticky top-0 flex flex-col h-screen p-4 bg-white border-r border-gray-200 w-72">
       
@@ -76,7 +80,11 @@ const Sidebar = () => {
       </div>
 
 
-      <button className="flex items-center justify-center w-full gap-2 px-4 py-2.5 mb-4 text-sm font-semibold text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50">
+      <button 
+      className="flex items-center justify-center w-full gap-2 px-4 py-2.5 mb-4 text-sm font-semibold text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50"
+      title='Add New Shop'
+      onClick={()=>setIsModalOpen(true)}
+      >
         <MdAddShoppingCart size={16} />
         Add Shop
       </button>
@@ -105,6 +113,9 @@ const Sidebar = () => {
       </nav>
 
       <ProfileSection user={user} logout={logout} />
+      {isModalOpen && (
+        <AddShopModal isOpen={isModalOpen} onClose={()=>setIsModalOpen(false)}/>
+      )}
     </aside>
   );
 };

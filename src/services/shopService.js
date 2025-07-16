@@ -49,7 +49,6 @@ export const deleteShopService = async (id) =>{
 export const selectActiveShopService = async (shopId) =>{
     try {
         const response = await selectActiveShopApi(shopId)
-        toast.success(response.data.message || "Shop Switched.")
         return response
     } catch (error) {
         throw error.response?.data || {message: "Failed to switch shop"}

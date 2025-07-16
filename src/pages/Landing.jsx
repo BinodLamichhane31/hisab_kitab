@@ -9,12 +9,7 @@ import HighlightBanner from '../components/HighlightBanner';
 import { AuthContext } from '../auth/authProvider';
 
 
-const Landing = () => {
-  const {user} = useContext(AuthContext)
-  console.log("User",user);
-  
-
-   
+const Landing = () => {   
    return <>
       <HighlightBanner />
       <Navbar/>
