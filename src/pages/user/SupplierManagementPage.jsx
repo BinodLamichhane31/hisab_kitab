@@ -2,10 +2,10 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import CustomerList from '../../components/suppliers/SuppliersList.jsx';
 import SupplierList from '../../components/suppliers/SuppliersList.jsx';
-// import CustomerDetail from '../../components/suppliers/SupplierDetail';
+import SupplierDetail from '../../components/suppliers/SupplierDetail.jsx';
 
 const SupplierManagementPage = () => {
-  const { customerId } = useParams();  
+  const { supplierId } = useParams();  
 
   return (
     <div className="flex w-full h-full">
@@ -14,7 +14,7 @@ const SupplierManagementPage = () => {
       </div>
 
       <div className="flex-1">
-        {/* <CustomerDetail customerId={customerId} /> */}
+        <SupplierDetail supplierId={supplierId} />
       </div>
     </div>
   );

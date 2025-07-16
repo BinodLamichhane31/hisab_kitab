@@ -46,6 +46,7 @@ function AppRouter() {
           <Route path="/customers/:customerId" element={<CustomerManagementPage />} />
           <Route path="/products" element={<SupplierManagement />} />
           <Route path="/suppliers" element={<SupplierManagementPage />} />
+          <Route path="/suppliers/:supplierId" element={<SupplierManagementPage />} />
         </Route>
 
         {/* Route WITHOUT the Dashboard Layout (but still private) */}

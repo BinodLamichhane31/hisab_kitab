@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { useGetCustomerById } from '../../hooks/useCustomer';
-import Table from '../common/Table'; // Your reusable Table component
-// Switching to a consistent, cooler icon set
+import Table from '../common/Table'; 
 import { User, FileText, Receipt, DollarSign, ShoppingBag, Calendar, UserCog, Pencil, Mail, Phone, MapPin } from 'lucide-react';
 import { MdMoney } from 'react-icons/md';
 
-// A small helper to get initials from a name
 const getInitials = (name) => {
   if (!name) return '?';
   const names = name.split(' ');
@@ -18,7 +16,6 @@ const CustomerDetail = ({ customerId }) => {
 
   const { data: customer, isLoading, isError } = useGetCustomerById(customerId);
 
-  // --- STATES ---
   if (!customerId) {
     return (
       <div className="flex items-center justify-center h-full bg-slate-50">
@@ -95,8 +92,6 @@ const CustomerDetail = ({ customerId }) => {
     </div>
   );
 };
-
-// --- SUB-COMPONENTS ---
 
 const StatCard = ({ icon: Icon, title, value }) => (
   <div className="flex items-center p-5 bg-white border border-slate-200 rounded-xl">
