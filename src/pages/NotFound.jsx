@@ -4,14 +4,12 @@ import Lottie from 'lottie-react'; // Import Lottie component
 // import { BookOpen } from 'lucide-react'; // No longer needed
 import { AuthContext } from '../auth/authProvider';
 
-// Import your Lottie animation JSON file
 import animationData from '../assets/notfound.json'; // Adjust the path if your assets folder is structured differently
 
 const NotFound = () => {
     const navigate = useNavigate();
     const { user } = useContext(AuthContext);
 
-    // Lottie animation options (optional, but good for control)
     const defaultOptions = {
         loop: true, // Set to true if you want the animation to loop
         autoplay: true, // Set to true if you want the animation to play automatically

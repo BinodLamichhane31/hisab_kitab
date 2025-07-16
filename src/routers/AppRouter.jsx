@@ -14,6 +14,7 @@ import { useContext } from "react";
 import SystemLogsPage from "../pages/admin/SystemLogs";
 import FullPageLoader from "../components/ui/FullPageLoader"; 
 import CreateFirstShop from "../pages/user/CreateFirstShop";
+import SupplierManagementPage from "../pages/user/SupplierManagementPage";
 
 
 
@@ -44,7 +45,7 @@ function AppRouter() {
           <Route path="/customers" element={<CustomerManagementPage />} />
           <Route path="/customers/:customerId" element={<CustomerManagementPage />} />
           <Route path="/products" element={<SupplierManagement />} />
-          <Route path="/suppliers" element={<SupplierManagement />} />
+          <Route path="/suppliers" element={<SupplierManagementPage />} />
         </Route>
 
         {/* Route WITHOUT the Dashboard Layout (but still private) */}
