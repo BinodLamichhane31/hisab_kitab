@@ -41,6 +41,11 @@ const CustomerList = () => {
       <div className="flex flex-col h-full bg-white border-r border-gray-200">
         
         <div className="p-3 border-b border-gray-200">
+          <div className='p-2'>
+                        <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+                            Customers
+                        </h1>
+                    </div>
           <div className="flex items-center gap-2">
             <div className="relative flex-1">
               <Search className="absolute w-4 h-4 text-gray-400 transform -translate-y-1/2 top-1/2 left-3" />

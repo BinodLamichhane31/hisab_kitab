@@ -9,6 +9,7 @@ const SupplierManagementPage = () => {
 
   return (
     <div className="flex w-full h-full">
+      
       <div className="w-1/3 max-w-sm bg-white border-r border-gray-200">
         <SupplierList />
       </div>

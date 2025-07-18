@@ -15,6 +15,8 @@ import SystemLogsPage from "../pages/admin/SystemLogs";
 import FullPageLoader from "../components/ui/FullPageLoader"; 
 import CreateFirstShop from "../pages/user/CreateFirstShop";
 import SupplierManagementPage from "../pages/user/SupplierManagementPage";
+import ProductManagement from "../pages/user/ProductManagement";
+import ProductDetailPage from "../pages/user/ProductDetailPage";
 
 
 
@@ -44,7 +46,8 @@ function AppRouter() {
           <Route path="/dashboard" element={<UserDashboard />} />
           <Route path="/customers" element={<CustomerManagementPage />} />
           <Route path="/customers/:customerId" element={<CustomerManagementPage />} />
-          <Route path="/products" element={<SupplierManagement />} />
+          <Route path="/products" element={<ProductManagement />} />
+          <Route path="/products/:productId" element={<ProductDetailPage />} />
           <Route path="/suppliers" element={<SupplierManagementPage />} />
           <Route path="/suppliers/:supplierId" element={<SupplierManagementPage />} />
         </Route>
