@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { useGetCustomerById } from '../../hooks/useCustomer';
+import { useDeleteCustomer, useGetCustomerById } from '../../hooks/useCustomer';
 import Table from '../common/Table'; 
-import { User, FileText, Receipt, DollarSign, ShoppingBag, Calendar, UserCog, Pencil, Mail, Phone, MapPin } from 'lucide-react';
+import { User, FileText, Receipt, DollarSign, ShoppingBag, Calendar, UserCog, Pencil, Mail, Phone, MapPin, Trash } from 'lucide-react';
 import { MdMoney } from 'react-icons/md';
+import CustomerFormModal from './CustomerFormModal';
+import { ConfirmationModal } from '../product/ConfirmationModel';
 
 const getInitials = (name) => {
   if (!name) return '?';
@@ -11,10 +13,25 @@ const getInitials = (name) => {
   return initials.slice(0, 2).toUpperCase();
 };
 
-const CustomerDetail = ({ customerId }) => {
+const CustomerDetail = ({ customerId, onDeleteSuccess }) => {
   const [activeTab, setActiveTab] = useState('overview');
-
+  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); 
   const { data: customer, isLoading, isError } = useGetCustomerById(customerId);
+  const { mutate: deleteCustomer , isPending: isDeleting} = useDeleteCustomer();
+
+  const handleConfirmDelete = () => {
+    if (customerId) {
+      deleteCustomer(customerId, {
+        onSuccess: () => {
+          setIsDeleteModalOpen(false);
+          if (onDeleteSuccess) {
+            onDeleteSuccess(); 1
+          }
+        }
+      });
+    }
+  };
 
   if (!customerId) {
     return (
@@ -40,7 +57,6 @@ const CustomerDetail = ({ customerId }) => {
 
   return (
     <div className="h-full p-6 overflow-y-auto bg-slate-50">
-      {/* --- NEW HEADER --- */}
       <div className="flex flex-col mb-6 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-4">
           <div className="flex items-center justify-center w-16 h-16 text-2xl font-bold text-white bg-orange-500 rounded-full">
@@ -54,14 +70,17 @@ const CustomerDetail = ({ customerId }) => {
           </div>
         </div>
         <div className="flex items-center gap-2 mt-4 sm:mt-0">
-          <button className="px-4 py-2 text-sm font-semibold bg-white border rounded-lg text-slate-700 border-slate-300 hover:bg-slate-100">
+          <button onClick={() => setIsModalOpen(true)} className="px-4 py-2 text-sm font-semibold bg-white border rounded-lg text-slate-700 border-slate-300 hover:bg-slate-100">
             <Pencil size={14} className="inline mr-2" />
             Edit
           </button>
+          <button onClick={() => setIsDeleteModalOpen(true)} className="px-4 py-2 text-sm font-semibold bg-white border rounded-lg text-slate-700 border-slate-300 hover:bg-slate-100">
+            <Trash size={14} className="inline mr-2" />
+            Delete
+          </button>          
         </div>
       </div>
 
-      {/* --- NEW TABS --- */}
       <div className="mb-8">
         <div className="inline-flex p-1 rounded-full bg-slate-200/60" role="tablist">
           {tabs.map((tab) => (
@@ -89,6 +108,23 @@ const CustomerDetail = ({ customerId }) => {
         {activeTab === 'details' && <DetailsTab customer={customer} />}
         {activeTab === 'transactions' && <TransactionsTab customer={customer} />}
       </div>
+
+      {isModalOpen && (
+        <CustomerFormModal 
+          onClose={() => setIsModalOpen(false)}
+          customerToEdit={customer} 
+        />
+      )}
+
+      <ConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title="Delete Customer"
+        message={`Are you sure you want to permanently delete "${customer.name}"? This action cannot be undone.`}
+        confirmText={isDeleting ? 'Deleting...' : 'Delete'}
+      />
+      
     </div>
   );
 };

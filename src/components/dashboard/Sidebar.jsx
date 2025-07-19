@@ -16,7 +16,6 @@ import { AuthContext } from '../../auth/authProvider';
 import ShopSwitcher from './ShopSwitcher'; //
 import { HiPlus } from 'react-icons/hi';
 import { MdAddShoppingCart } from 'react-icons/md';
-import AddCustomerModal from '../customers/AddCustomerModal';
 import AddShopModal from '../shop/AddShopModal';
 
 const ProfileSection = ({ user, logout }) => (

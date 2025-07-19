@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useGetCustomersByShop } from '../../hooks/useCustomer';
 import { AuthContext } from '../../auth/authProvider';
 import { Search, Plus, Loader2, Users } from 'lucide-react';
-import AddCustomerModal from './AddCustomerModal';
+import CustomerFormModal from './CustomerFormModal';
 
 const getInitials = (name) => {
   if (!name) return '?';
@@ -118,7 +118,7 @@ const CustomerList = () => {
       </div>
       
       {isModalOpen && (
-        <AddCustomerModal
+        <CustomerFormModal
           shopId={shopId}
           onClose={() => setIsModalOpen(false)}
         />
