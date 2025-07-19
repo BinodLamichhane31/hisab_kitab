@@ -4,7 +4,7 @@ import Table from '../common/Table';
 import { User, FileText, Receipt, DollarSign, ShoppingBag, Calendar, UserCog, Pencil, Mail, Phone, MapPin, Trash } from 'lucide-react';
 import { MdMoney } from 'react-icons/md';
 import CustomerFormModal from './CustomerFormModal';
-import { ConfirmationModal } from '../product/ConfirmationModel';
+import { ConfirmationModal } from '../common/ConfirmationModel';
 
 const getInitials = (name) => {
   if (!name) return '?';

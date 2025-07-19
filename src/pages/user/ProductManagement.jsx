@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom';
 import { Search, Plus, MoreVertical, Edit, Trash2, ImageIcon, Package, Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useGetProductsByShop, useDeleteProduct } from '../../hooks/useProduct';
 import useDebounce from '../../hooks/useDebounce';
-import { ConfirmationModal } from '../../components/product/ConfirmationModel';
+import { ConfirmationModal } from '../../components/common/ConfirmationModel';
 import { AuthContext } from '../../auth/authProvider';
+import { Button } from '@headlessui/react';
+import ProductFormModal from '../../components/product/ProductFormModal';
 
 
 const ProductStatusBadge = ({ quantity, reorderLevel }) => {
@@ -99,6 +101,8 @@ const ProductManagement = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [productToDelete, setProductToDelete] = useState(null);
+    const [isProductModalOpen, setIsProductModalOpen] = useState(false);
+    const [productToEdit, setProductToEdit] = useState(null);
 
     const debouncedSearchTerm = useDebounce(searchTerm, 500);
     const { currentShop } = useContext(AuthContext);
@@ -129,6 +133,16 @@ const ProductManagement = () => {
         }
     };
 
+    const handleAddClick = () => {
+        setProductToEdit(null); // Set to null for "add" mode
+        setIsProductModalOpen(true);
+    };
+
+    const handleEditClick = (product) => {
+        setProductToEdit(product); // Pass the product object for "edit" mode
+        setIsProductModalOpen(true);
+    };
+
     const products = data?.data || [];
     const pagination = data?.pagination || {};
 
@@ -145,10 +159,10 @@ const ProductManagement = () => {
                             Manage, track, and organize all your products in one place.
                         </p>
                     </div>
-                    <Link to="/products/new" className="inline-flex items-center px-4 py-2 mt-4 text-sm font-medium text-white transition-transform transform bg-orange-500 border border-transparent rounded-md shadow-sm md:mt-0 hover:bg-orange-600 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">
+                    <button onClick={handleAddClick} className="inline-flex items-center px-4 py-2 mt-4 text-sm font-medium text-white transition-transform transform bg-orange-500 border border-transparent rounded-md shadow-sm md:mt-0 hover:bg-orange-600 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">
                         <Plus className="w-5 h-5 mr-2 -ml-1" />
                         Add Product
-                    </Link>
+                    </button>
                 </div>
 
                 {/* Search Bar */}
@@ -181,22 +195,23 @@ const ProductManagement = () => {
                                     products.map((product) => (
                                         <tr key={product._id} className="transition-colors duration-200 hover:bg-orange-50/60">
                                             <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="flex items-center">
+                                                <Link to={`/products/${product._id}`} className="flex items-center group">
                                                     <div className="flex-shrink-0 w-12 h-12">
                                                         {product.imageUrl ? <img className="object-cover w-12 h-12 rounded-lg" src={product.imageUrl} alt={product.name} /> : <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-lg"><ImageIcon className="w-6 h-6 text-gray-400" /></div>}
                                                     </div>
                                                     <div className="ml-4">
-                                                        <div className="text-sm font-medium text-gray-900">{product.name}</div>
+                                                        {/* Added group-hover for a nice underline effect on hover */}
+                                                        <div className="text-sm font-medium text-gray-900 transition-colors group-hover:text-orange-600 group-hover:underline">{product.name}</div>
                                                         <div className="text-sm text-gray-500">{product.category}</div>
                                                     </div>
-                                                </div>
+                                                </Link>
                                             </td>
                                             <td className="hidden px-6 py-4 md:table-cell whitespace-nowrap"><div className="text-sm text-gray-900">₹{product.sellingPrice} <span className="text-gray-500">/ ₹{product.purchasePrice}</span></div></td>
                                             <td className="px-6 py-4 whitespace-nowrap"><div className="text-sm text-gray-900">{product.quantity} units</div></td>
                                             <td className="hidden px-6 py-4 sm:table-cell whitespace-nowrap"><ProductStatusBadge quantity={product.quantity} reorderLevel={product.reorderLevel} /></td>
                                             <td className="px-6 py-4 text-right whitespace-nowrap">
                                                 <ActionMenu 
-                                                    onEdit={() => {/* Navigate to edit page */ window.location.href = `/products/${product._id}`}}
+                                                    onEdit={() => handleEditClick(product)}
                                                     onDelete={() => handleDeleteClick(product)}
                                                 />
                                             </td>
@@ -224,7 +239,11 @@ const ProductManagement = () => {
                     )}
                 </div>
             </div>
-
+            <ProductFormModal
+                isOpen={isProductModalOpen}
+                onClose={() => setIsProductModalOpen(false)}
+                productToEdit={productToEdit}
+            />
             <ConfirmationModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}

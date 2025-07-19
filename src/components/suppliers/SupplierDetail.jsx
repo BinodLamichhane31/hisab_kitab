@@ -7,7 +7,7 @@ import {
   Trash
 } from 'lucide-react';
 import { MdMoney } from 'react-icons/md';
-import { ConfirmationModal } from '../product/ConfirmationModel';
+import { ConfirmationModal } from '../common/ConfirmationModel';
 import CustomerFormModal from '../customers/CustomerFormModal';
 import SupplierFormModal from './SupplierFormModal';
 
