@@ -7,6 +7,7 @@ import {
   updateSupplierService,
   deleteSupplierService
 } from "../services/supplierService";
+import { useNavigate } from "react-router-dom";
 
 export const useAddSupplier = () => {
   const queryClient = useQueryClient();
@@ -46,25 +47,32 @@ export const useGetSupplierById = (id) => {
 export const useUpdateSupplier = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, data }) => updateSupplierService(id, data),
+    mutationFn: (supplierData) => {
+      const { id, ...data } = supplierData; 
+      return updateSupplierService(id, data);
+    },
     mutationKey: ['update_supplier'],
-    onSuccess: (data) => {
-      toast.success(data.message || "Supplier updated successfully.");
-      queryClient.invalidateQueries(['suppliers']);
-      queryClient.invalidateQueries(['supplier', data.data._id]);
+    onSuccess: (response) => {
+      toast.success(response.message || "Supplier updated successfully.");
+      queryClient.invalidateQueries({ queryKey: ['suppliers'] });
+      if (response.data?._id) {
+        queryClient.invalidateQueries({ queryKey: ['supplier', response.data._id] });
+      }
     },
     onError: (error) => {
-      toast.error(error.message || "Failed to update supplier.");
+      toast.error(error.message || "Failed to update customer.");
     },
   });
 };
 
 export const useDeleteSupplier = () => {
   const queryClient = useQueryClient();
+  const navigate = useNavigate()
   return useMutation({
     mutationFn: (id) => deleteSupplierService(id),
     mutationKey: ['delete_supplier'],
     onSuccess: (data) => {
+      navigate('/suppliers')
       toast.success(data.message || "Supplier deleted.");
       queryClient.invalidateQueries(['suppliers']);
     },

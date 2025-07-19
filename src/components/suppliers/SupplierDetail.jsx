@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
-import { useGetSupplierById } from '../../hooks/useSupplier';
+import { useDeleteSupplier, useGetSupplierById } from '../../hooks/useSupplier';
 import Table from '../common/Table';
 import {
   User, FileText, Receipt, DollarSign, ShoppingBag,
-  Calendar, UserCog, Pencil, Mail, Phone, MapPin
+  Calendar, UserCog, Pencil, Mail, Phone, MapPin,
+  Trash
 } from 'lucide-react';
 import { MdMoney } from 'react-icons/md';
+import { ConfirmationModal } from '../product/ConfirmationModel';
+import CustomerFormModal from '../customers/CustomerFormModal';
+import SupplierFormModal from './SupplierFormModal';
 
 const getInitials = (name) => {
   if (!name) return '?';
@@ -14,9 +18,25 @@ const getInitials = (name) => {
   return initials.slice(0, 2).toUpperCase();
 };
 
-const SupplierDetail = ({ supplierId }) => {
+const SupplierDetail = ({ supplierId, onDeleteSuccess}) => {
   const [activeTab, setActiveTab] = useState('overview');
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const { data: supplier, isLoading, isError } = useGetSupplierById(supplierId);
+  const { mutate: deleteSupplier, isPending: isDeleting } = useDeleteSupplier();
+
+  const handleConfirmDelete =() =>{
+    if(supplierId){
+      deleteSupplier(supplierId, {
+        onSuccess: () =>{
+          setIsDeleteModalOpen(false);
+          if(onDeleteSuccess) {
+            onDeleteSuccess();
+          }
+        }
+      })
+    }
+  }
 
   if (!supplierId) {
     return (
@@ -42,7 +62,6 @@ const SupplierDetail = ({ supplierId }) => {
 
   return (
     <div className="h-full p-6 overflow-y-auto bg-slate-50">
-      {/* Header */}
       <div className="flex flex-col mb-6 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-4">
           <div className="flex items-center justify-center w-16 h-16 text-2xl font-bold text-white bg-orange-500 rounded-full">
@@ -56,14 +75,17 @@ const SupplierDetail = ({ supplierId }) => {
           </div>
         </div>
         <div className="flex items-center gap-2 mt-4 sm:mt-0">
-          <button className="px-4 py-2 text-sm font-semibold bg-white border rounded-lg text-slate-700 border-slate-300 hover:bg-slate-100">
+          <button onClick={()=> setIsEditModalOpen(true)} className="px-4 py-2 text-sm font-semibold bg-white border rounded-lg text-slate-700 border-slate-300 hover:bg-slate-100">
             <Pencil size={14} className="inline mr-2" />
             Edit
+          </button>
+          <button onClick={() => setIsDeleteModalOpen(true)} className="px-4 py-2 text-sm font-semibold bg-white border rounded-lg text-slate-700 border-slate-300 hover:bg-slate-100">
+            <Trash size={14} className="inline mr-2" />
+            Delete
           </button>
         </div>
       </div>
 
-      {/* Tabs */}
       <div className="mb-8">
         <div className="inline-flex p-1 rounded-full bg-slate-200/60" role="tablist">
           {tabs.map((tab) => (
@@ -85,12 +107,25 @@ const SupplierDetail = ({ supplierId }) => {
         </div>
       </div>
 
-      {/* Tab Content */}
       <div>
         {activeTab === 'overview' && <OverviewTab supplier={supplier} />}
         {activeTab === 'details' && <DetailsTab supplier={supplier} />}
         {activeTab === 'transactions' && <TransactionsTab supplier={supplier} />}
       </div>
+       {isEditModalOpen && (
+        <SupplierFormModal 
+          onClose={() => setIsEditModalOpen(false)}
+          supplierToEdit={supplier} 
+        />
+      )}
+      <ConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title="Delete Supplier"
+        message={`Are you sure you want to permanently delete "${supplier.name}"? This action cannot be undone.`}
+        confirmText={isDeleting ? 'Deleting...' : 'Delete'}
+      />
     </div>
   );
 };

@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useGetSuppliersByShop } from '../../hooks/useSupplier';
 import { AuthContext } from '../../auth/authProvider';
 import { Search, Plus, Loader2, Users } from 'lucide-react';
-import AddSupplierModal from './AddSupplierModal';
+import AddSupplierModal from './SupplierFormModal';
 
 const getInitials = (name) => {
   if (!name) return '?';

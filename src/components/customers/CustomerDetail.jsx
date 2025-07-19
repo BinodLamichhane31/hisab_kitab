@@ -26,7 +26,7 @@ const CustomerDetail = ({ customerId, onDeleteSuccess }) => {
         onSuccess: () => {
           setIsDeleteModalOpen(false);
           if (onDeleteSuccess) {
-            onDeleteSuccess(); 1
+            onDeleteSuccess(); 
           }
         }
       });
@@ -102,7 +102,6 @@ const CustomerDetail = ({ customerId, onDeleteSuccess }) => {
         </div>
       </div>
 
-      {/* Tab Content */}
       <div>
         {activeTab === 'overview' && <OverviewTab customer={customer} />}
         {activeTab === 'details' && <DetailsTab customer={customer} />}

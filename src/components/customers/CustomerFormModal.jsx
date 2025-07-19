@@ -83,7 +83,6 @@ const CustomerFormModal = ({ onClose, shopId, customerToEdit }) => {
                     </button>
                 </div>
 
-                {/* 4. Use formik.handleSubmit */}
                 <form onSubmit={formik.handleSubmit} className="mt-6 space-y-4">
                     <InputGroup
                         icon={User}
