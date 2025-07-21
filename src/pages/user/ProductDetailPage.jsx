@@ -11,6 +11,7 @@ import {
   Hash,
   Layers
 } from 'lucide-react';
+import { getBackendImageUrl } from '../../utils/backendImage';
 
 const ProductStatusBadge = ({ quantity, reorderLevel }) => {
     let config = { text: 'In Stock', className: 'bg-green-100 text-green-800' };
@@ -78,10 +79,9 @@ const ProductDetailPage = () => {
 
                 <div className="overflow-hidden bg-white shadow-lg rounded-xl">
                     <div className="grid grid-cols-1 md:grid-cols-3">
-                        {/* Image Section */}
                         <div className="flex items-center justify-center p-6 md:col-span-1 bg-slate-50">
-                            {product.imageUrl ? (
-                                <img src={product.imageUrl} alt={product.name} className="object-contain w-full h-64 rounded-lg" />
+                            {product.image ? (
+                                <img src={getBackendImageUrl(product.image)} alt={product.name} className="object-contain w-full h-64 rounded-lg" />
                             ) : (
                                 <div className="flex items-center justify-center w-full h-64 bg-gray-200 rounded-lg">
                                     <ImageIcon className="w-16 h-16 text-gray-400" />

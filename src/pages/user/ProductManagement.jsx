@@ -5,8 +5,8 @@ import { useGetProductsByShop, useDeleteProduct } from '../../hooks/useProduct';
 import useDebounce from '../../hooks/useDebounce';
 import { ConfirmationModal } from '../../components/common/ConfirmationModel';
 import { AuthContext } from '../../auth/authProvider';
-import { Button } from '@headlessui/react';
 import ProductFormModal from '../../components/product/ProductFormModal';
+import { getBackendImageUrl } from '../../utils/backendImage';
 
 
 const ProductStatusBadge = ({ quantity, reorderLevel }) => {
@@ -28,7 +28,7 @@ const ProductStatusBadge = ({ quantity, reorderLevel }) => {
     );
 };
 
-const ActionMenu = ({ onEdit, onDelete }) => {
+const ActionMenu = ({ onEdit, onDelete, isAbove = false }) => {
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef(null);
 
@@ -48,7 +48,8 @@ const ActionMenu = ({ onEdit, onDelete }) => {
                 <MoreVertical size={20} />
             </button>
             {isOpen && (
-                <div className="absolute right-0 z-10 w-40 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5">
+                <div className={`absolute right-0 z-10 w-40 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 
+                    ${isAbove ? 'bottom-10' : 'mt-2'}`}>
                     <div className="py-1">
                         <button onClick={onEdit} className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                             <Edit className="w-4 h-4 mr-3" /> Edit
@@ -62,6 +63,7 @@ const ActionMenu = ({ onEdit, onDelete }) => {
         </div>
     );
 };
+
 
 const TableSkeleton = () => (
     [...Array(5)].map((_, i) => (
@@ -83,15 +85,17 @@ const TableSkeleton = () => (
     ))
 );
 
-const EmptyState = () => (
+// CHANGE 1: Accept onAddClick as a prop
+const EmptyState = ({ onAddClick }) => (
     <div className="py-20 text-center">
         <Package className="w-16 h-16 mx-auto text-gray-300" />
         <h3 className="mt-4 text-lg font-semibold text-gray-800">No Products Found</h3>
         <p className="mt-1 text-sm text-gray-500">Get started by adding a new product to your inventory.</p>
-        <Link to="/products/new" className="inline-flex items-center px-4 py-2 mt-6 text-sm font-medium text-white transition-transform transform bg-orange-500 border border-transparent rounded-md shadow-sm hover:bg-orange-600 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">
+        {/* CHANGE 2: Use the onAddClick prop here */}
+        <button onClick={onAddClick} className="inline-flex items-center px-4 py-2 mt-6 text-sm font-medium text-white transition-transform transform bg-orange-500 border border-transparent rounded-md shadow-sm hover:bg-orange-600 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">
             <Plus className="w-5 h-5 mr-2 -ml-1" />
             Add Your First Product
-        </Link>
+        </button>
     </div>
 );
 
@@ -134,12 +138,12 @@ const ProductManagement = () => {
     };
 
     const handleAddClick = () => {
-        setProductToEdit(null); // Set to null for "add" mode
+        setProductToEdit(null); 
         setIsProductModalOpen(true);
     };
 
     const handleEditClick = (product) => {
-        setProductToEdit(product); // Pass the product object for "edit" mode
+        setProductToEdit(product); 
         setIsProductModalOpen(true);
     };
 
@@ -190,17 +194,16 @@ const ProductManagement = () => {
                                 ) : isError ? (
                                     <tr><td colSpan="5" className="py-10 text-center text-red-500">{error.message}</td></tr>
                                 ) : products.length === 0 ? (
-                                     <tr><td colSpan="5"><EmptyState /></td></tr>
+                                     <tr><td colSpan="5"><EmptyState onAddClick={handleAddClick} /></td></tr>
                                 ) : (
-                                    products.map((product) => (
+                                    products.map((product,index) => (
                                         <tr key={product._id} className="transition-colors duration-200 hover:bg-orange-50/60">
                                             <td className="px-6 py-4 whitespace-nowrap">
                                                 <Link to={`/products/${product._id}`} className="flex items-center group">
                                                     <div className="flex-shrink-0 w-12 h-12">
-                                                        {product.imageUrl ? <img className="object-cover w-12 h-12 rounded-lg" src={product.imageUrl} alt={product.name} /> : <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-lg"><ImageIcon className="w-6 h-6 text-gray-400" /></div>}
+                                                        {product.image ? <img className="object-cover w-12 h-12 rounded-lg" src={getBackendImageUrl(product.image)} alt={product.name} /> : <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-lg"><ImageIcon className="w-6 h-6 text-gray-400" /></div>}
                                                     </div>
                                                     <div className="ml-4">
-                                                        {/* Added group-hover for a nice underline effect on hover */}
                                                         <div className="text-sm font-medium text-gray-900 transition-colors group-hover:text-orange-600 group-hover:underline">{product.name}</div>
                                                         <div className="text-sm text-gray-500">{product.category}</div>
                                                     </div>
@@ -213,6 +216,7 @@ const ProductManagement = () => {
                                                 <ActionMenu 
                                                     onEdit={() => handleEditClick(product)}
                                                     onDelete={() => handleDeleteClick(product)}
+                                                    isAbove={index === products.length - 1}
                                                 />
                                             </td>
                                         </tr>
@@ -258,4 +262,3 @@ const ProductManagement = () => {
 };
 
 export default ProductManagement;
-

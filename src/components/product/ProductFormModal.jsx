@@ -15,6 +15,7 @@ import {
   AlertCircle
 } from 'lucide-react';
 
+
 const productValidationSchema = Yup.object({
   name: Yup.string()
     .min(3, 'Name must be at least 3 characters')
@@ -45,6 +46,24 @@ const productValidationSchema = Yup.object({
     .required('Reorder level is required.'),
   productImage: Yup.mixed().nullable(), 
 });
+
+const productCategories = [
+  'Groceries & Food',
+  'Beverages',
+  'Electronics & Gadgets',
+  'Fashion & Apparel',
+  'Health & Personal Care',
+  'Home & Kitchen',
+  'Furniture & Decor',
+  'Books & Stationery',
+  'Sports & Outdoors',
+  'Toys & Games',
+  'Automotive & Tools',
+  'Pet Supplies',
+  'Beauty & Cosmetics',
+  'Office Supplies',
+  'Other',
+];
 
 const FormInput = ({ label, name, formik, icon: Icon, ...props }) => (
   <div>
@@ -97,6 +116,39 @@ const FormTextarea = ({ label, name, formik, ...props }) => (
     </div>
 );
 
+// Add this new component to your file
+const FormSelect = ({ label, name, formik, icon: Icon, children, ...props }) => (
+    <div>
+      <label htmlFor={name} className="block mb-1 text-sm font-medium text-gray-700">{label}</label>
+      <div className="relative">
+        {Icon && <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"><Icon className="w-5 h-5 text-slate-400" /></span>}
+        <select
+          id={name}
+          name={name}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          value={formik.values[name]}
+          className={`block w-full py-2.5 ${Icon ? 'pl-10' : 'px-3'} pr-10 text-sm text-slate-800 bg-slate-100 rounded-lg transition appearance-none
+          ${formik.touched[name] && formik.errors[name]
+              ? 'border-red-500 border focus:ring-red-500/50'
+              : 'border-transparent focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-500'}`}
+          {...props}
+        >
+          {children}
+        </select>
+        <span className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+           {/* Dropdown Arrow */}
+           <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+        </span>
+      </div>
+      {formik.touched[name] && formik.errors[name] && (
+        <div className="flex items-center mt-1.5 text-xs text-red-600">
+          <AlertCircle size={14} className="mr-1" />
+          {formik.errors[name]}
+        </div>
+      )}
+    </div>
+);
 
 const ProductFormModal = ({ isOpen, onClose, productToEdit }) => {
   const { mutate: addProduct, isPending: isAdding } = useAddProduct();
@@ -213,8 +265,20 @@ const ProductFormModal = ({ isOpen, onClose, productToEdit }) => {
                 <div className="sm:col-span-2">
                   <FormInput label="Product Name" name="name" formik={formik} icon={Package} type="text" placeholder="e.g. Organic Coffee Beans" />
                 </div>
-                <div className="sm:col-span-2">
-                  <FormInput label="Category" name="category" formik={formik} icon={Layers} type="text" placeholder="e.g. Beverages" />
+            <div className="sm:col-span-2">
+              <FormSelect
+                    label="Category"
+                    name="category"
+                    formik={formik}
+                    icon={Layers}
+                >
+                    <option value="" disabled>Select a category</option>
+                    {productCategories.map(category => (
+                    <option key={category} value={category}>
+                        {category}
+                    </option>
+                    ))}
+                </FormSelect>
                 </div>
                 <div className="sm:col-span-2">
                 <FormTextarea
