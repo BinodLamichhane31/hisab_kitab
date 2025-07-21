@@ -19,7 +19,7 @@ export const getSuppliersByShopService = async (params) => {
   }
 };
 
-export const getSuppliersByIdService = async (id) => {
+export const getSupplierByIdService = async (id) => {
   try {
     const response = await getSupplierByIdApi(id);
     return response.data;
