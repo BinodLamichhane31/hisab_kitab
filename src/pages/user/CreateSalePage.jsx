@@ -58,12 +58,12 @@ const SaleSummary = ({ values, isCashSale }) => {
         <div className="sticky p-6 space-y-4 bg-white shadow-lg top-8 rounded-xl ring-1 ring-gray-900/5">
             <h2 className="pb-4 text-xl font-semibold text-gray-800 border-b">Order Summary</h2>
             <div className="space-y-2 text-sm">
-                <div className="flex justify-between"><span className="text-gray-600">Subtotal</span><span className="font-medium text-gray-800">₹{values.subTotal.toFixed(2)}</span></div>
-                <div className="flex items-center justify-between"><label htmlFor="discount" className="text-gray-600">Discount (₹)</label><Field name="discount" type="number" className="w-24 p-1 text-right border-gray-300 rounded-md"/></div>
-                <div className="flex items-center justify-between"><label htmlFor="tax" className="text-gray-600">Tax (₹)</label><Field name="tax" type="number" className="w-24 p-1 text-right border-gray-300 rounded-md"/></div>
+                <div className="flex justify-between"><span className="text-gray-600">Subtotal</span><span className="font-medium text-gray-800">Rs. {values.subTotal.toFixed(2)}</span></div>
+                <div className="flex items-center justify-between"><label htmlFor="discount" className="text-gray-600">Discount (Rs.)</label><Field name="discount" type="number" className="w-24 p-1 text-right border-gray-300 rounded-md"/></div>
+                <div className="flex items-center justify-between"><label htmlFor="tax" className="text-gray-600">Tax (Rs.)</label><Field name="tax" type="number" className="w-24 p-1 text-right border-gray-300 rounded-md"/></div>
             </div>
             <div className="pt-4 mt-2 border-t-2 border-dashed">
-                <div className="flex justify-between text-lg font-bold text-gray-900"><span>Grand Total</span><span>₹{values.grandTotal.toFixed(2)}</span></div>
+                <div className="flex justify-between text-lg font-bold text-gray-900"><span>Grand Total</span><span>Rs. {values.grandTotal.toFixed(2)}</span></div>
             </div>
             <div className="p-4 rounded-lg bg-slate-50">
                 <div className="flex items-center justify-between">
@@ -79,7 +79,7 @@ const SaleSummary = ({ values, isCashSale }) => {
             </div>
             <div className="flex justify-between p-3 rounded-lg bg-gradient-to-r from-orange-50 to-amber-50">
                 <span className="font-semibold text-orange-800">Amount Due</span>
-                <span className="font-bold text-orange-800">₹{amountDue > 0 ? amountDue.toFixed(2) : '0.00'}</span>
+                <span className="font-bold text-orange-800">Rs. {amountDue > 0 ? amountDue.toFixed(2) : '0.00'}</span>
             </div>
         </div>
     );
@@ -217,7 +217,7 @@ const CreateSalePage = () => {
                                                                             <Field name={`items[${index}].quantity`} type="number" min="1" className="w-full p-1 text-center border-gray-300 rounded-md"/>
                                                                         </td>
                                                                         <td className="py-2"><Field name={`items[${index}].priceAtSale`} type="number" step="0.01" className="w-full p-1 text-right border-gray-300 rounded-md"/></td>
-                                                                        <td className="py-2 text-sm font-medium text-right text-gray-900">₹{(item.quantity * item.priceAtSale).toFixed(2)}</td>
+                                                                        <td className="py-2 text-sm font-medium text-right text-gray-900">Rs. {(item.quantity * item.priceAtSale).toFixed(2)}</td>
                                                                         <td className="py-2 text-right"><button type="button" onClick={() => remove(index)} className="p-1 text-red-500 rounded-full hover:bg-red-100"><Trash2 size={16}/></button></td>
                                                                     </tr>
                                                                 )) : <tr><td colSpan="5" className="py-10 text-center text-gray-500"><FileText className="inline-block w-8 h-8 mb-2"/><p>No products added yet.</p></td></tr>}

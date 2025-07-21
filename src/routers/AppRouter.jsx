@@ -5,7 +5,6 @@ import AdminRoute from "./AdminRoute";
 import LandingPage from "../pages/Landing";
 import UserDashboard from "../pages/user/DashboardPage";
 import CustomerManagementPage from "../pages/user/CustomerManagementPage";
-import SupplierManagement from "../pages/user/SupplierManagement";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import UserManagement from "../pages/admin/UserManagement";
 import NotFound from "../pages/NotFound";
@@ -19,6 +18,7 @@ import ProductManagement from "../pages/user/ProductManagement";
 import ProductDetailPage from "../pages/user/ProductDetailPage";
 import SalesPage from "../pages/user/SalesPage";
 import CreateSalePage from "../pages/user/CreateSalePage";
+import SaleDetailsPage from "../pages/user/SaleDetailsPage";
 
 
 
@@ -54,6 +54,7 @@ function AppRouter() {
           <Route path="/suppliers/:supplierId" element={<SupplierManagementPage />} />
           <Route path="/sales" element={<SalesPage />} />
           <Route path="/sales/new" element={<CreateSalePage />} />
+          <Route path="/sales/:id" element={<SaleDetailsPage />} />
         </Route>
 
         {/* Route WITHOUT the Dashboard Layout (but still private) */}

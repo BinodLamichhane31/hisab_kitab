@@ -20,12 +20,10 @@ export default function ProductSelectionModal({ isOpen, onClose }) {
     });
     const products = productResponse?.data || [];
 
-    // V-- NEW: Create a memoized Set for quick lookups of existing item IDs --V
     const existingItemIds = useMemo(() => {
         return new Set(values.items.map(item => item.productId));
     }, [values.items]);
     
-    // Reset local state when modal opens
     useEffect(() => {
         if (isOpen) {
             setSelectedProducts({});
@@ -33,7 +31,6 @@ export default function ProductSelectionModal({ isOpen, onClose }) {
     }, [isOpen]);
 
     const handleToggleProduct = (product) => {
-        // V-- NEW: Prevent toggling if the product is already in the sale --V
         if (existingItemIds.has(product._id)) {
             toast.info(`${product.name} is already in the sale cart.`);
             return;
@@ -106,15 +103,14 @@ export default function ProductSelectionModal({ isOpen, onClose }) {
                                         <input 
                                             type="checkbox" 
                                             readOnly 
-                                            checked={isSelected || isAlreadyInCart} // V-- Check if it's selected OR already in the cart --V
+                                            checked={isSelected || isAlreadyInCart} 
                                             disabled={isDisabled}
                                             className="w-5 h-5 mr-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500 disabled:text-gray-400 disabled:border-gray-200"
                                         />
                                         <div className="flex-grow">
                                             <p className="font-medium text-gray-800">{product.name}</p>
-                                            <p className="text-sm text-gray-500">Stock: {product.quantity} | Price: ₹{product.sellingPrice}</p>
+                                            <p className="text-sm text-gray-500">Stock: {product.quantity} | Price: Rs. {product.sellingPrice}</p>
                                         </div>
-                                        {/* V-- NEW: Display a more descriptive status badge --V */}
                                         {isAlreadyInCart ? (
                                             <span className="flex items-center text-xs font-semibold text-green-700">
                                                 <Check size={14} className="mr-1" /> Added
