@@ -150,8 +150,8 @@ const OverviewTab = ({ customer }) => (
 
     <StatCard
       icon={DollarSign}
-      title="Current Balanced"
-      value={`Rs. ${customer.totalSpent?.toFixed(2) || '0.00'}`}
+      title="Current Balance"
+      value={`Rs. ${customer.currentBalance?.toFixed(2) || '0.00'}`}
     />
    
     <StatCard

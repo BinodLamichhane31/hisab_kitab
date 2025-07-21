@@ -10,13 +10,15 @@ import {
   Logs,
   LogOut,
   UserPlus,
-  Bell 
+  Bell, 
+  TagIcon,
+  ReceiptText
 } from 'lucide-react';
 import { AuthContext } from '../../auth/authProvider';
-import ShopSwitcher from './ShopSwitcher'; //
-import { HiPlus } from 'react-icons/hi';
-import { MdAddShoppingCart } from 'react-icons/md';
+import ShopSwitcher from './ShopSwitcher'; 
+import { MdAddShoppingCart, MdSell } from 'react-icons/md';
 import AddShopModal from '../shop/AddShopModal';
+import { Tag } from 'lucide';
 
 const ProfileSection = ({ user, logout }) => (
   <div className="p-2 pt-4 mt-auto border-t border-gray-200">
@@ -53,8 +55,9 @@ const Sidebar = () => {
   const userLinks = [
     { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
     { to: "/customers", label: "Customers", icon: Users },
-    { to: "/products", label: "Products", icon: Package },
     { to: "/suppliers", label: "Suppliers", icon: Truck },
+    { to: "/products", label: "Products", icon: Package },
+    { to: "/sales", label: "Sales", icon: ReceiptText },
   ];
 
   const adminLinks = [

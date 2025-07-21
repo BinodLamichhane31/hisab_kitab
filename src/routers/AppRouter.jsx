@@ -17,6 +17,8 @@ import CreateFirstShop from "../pages/user/CreateFirstShop";
 import SupplierManagementPage from "../pages/user/SupplierManagementPage";
 import ProductManagement from "../pages/user/ProductManagement";
 import ProductDetailPage from "../pages/user/ProductDetailPage";
+import SalesPage from "../pages/user/SalesPage";
+import CreateSalePage from "../pages/user/CreateSalePage";
 
 
 
@@ -50,6 +52,8 @@ function AppRouter() {
           <Route path="/products/:productId" element={<ProductDetailPage />} />
           <Route path="/suppliers" element={<SupplierManagementPage />} />
           <Route path="/suppliers/:supplierId" element={<SupplierManagementPage />} />
+          <Route path="/sales" element={<SalesPage />} />
+          <Route path="/sales/new" element={<CreateSalePage />} />
         </Route>
 
         {/* Route WITHOUT the Dashboard Layout (but still private) */}
