@@ -35,7 +35,7 @@ export const useGetShopById = (id) =>{
     return useQuery(
         {
             queryKey:['shop',id],
-            queryFn: getShopByIdService(id),
+            queryFn:() => getShopByIdService(id),
             select: (res) => res.data.data,
             enabled: !!id,
             retry: false

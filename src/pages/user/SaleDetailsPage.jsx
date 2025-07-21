@@ -1,14 +1,21 @@
 import React, { useState, Fragment } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useGetSaleById, useCancelSale, useRecordPaymentForSale } from '../../hooks/useSale';
-import { ConfirmationModal } from '../../components/common/ConfirmationModel';
+import { ConfirmationModal } from '../../components/common/ConfirmationModel'; // Assuming this exists
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { Dialog, Transition } from '@headlessui/react';
+import { useGetShopById } from '../../hooks/useShop';
 
+
+// Lucide Icons
 import {
     ChevronLeft, Loader2, CircleAlert, Printer, XCircle, Banknote, Save, X
 } from 'lucide-react';
+
+// ===================================================================================
+//  1. SUB-COMPONENTS (All defined within the same file)
+// ===================================================================================
 
 const SalesStatusBadge = ({ sale }) => {
     let config = { text: 'Due', className: 'bg-red-100 text-red-800' };
@@ -54,6 +61,23 @@ const SaleDetailHeader = ({ sale, onPrint, onCancelClick, onPaymentClick, canCan
     </div>
 );
 
+const ShopInfoForPrint = ({ shop }) => {
+    const { data: shopData, isLoading } = useGetShopById(shop);
+    console.log(shopData);
+    
+    
+    if (!shopData) return null;
+    return (
+        <div className="items-center hidden pb-6 mb-6 border-b print:block">
+            <h2 className="text-2xl font-bold text-gray-900">{shopData.name}</h2>
+            <address className="mt-1 text-xs not-italic text-gray-500">
+                {shopData.address && <p>{shopData.address}</p>}
+                {shopData.contactNumber && <p>{shopData.contactNumber}</p>}
+            </address>
+        </div>
+    );
+};
+
 const CustomerInfo = ({ customer }) => (
     <div>
         <h3 className="text-sm font-semibold text-gray-800">Billed To</h3>
@@ -87,7 +111,6 @@ const SaleMetadata = ({ sale }) => (
 
 const SaleItemsTable = ({ items }) => (
     <div className="mt-6">
-        <h3 className="text-lg font-semibold text-gray-900 print:text-base">Items Summary</h3>
         <div className="mt-4 -mx-8 overflow-x-auto print:overflow-visible print:mx-0">
             <div className="inline-block min-w-full px-8 align-middle print:px-0">
                 <table className="min-w-full divide-y divide-gray-200">
@@ -121,7 +144,7 @@ const SaleFinancials = ({ sale }) => (
             <div className="flex justify-between"><span className="text-gray-600">Subtotal:</span><span className="font-medium text-gray-800">{sale.subTotal.toLocaleString('en-IN', { style: 'currency', currency: 'NPR' })}</span></div>
             <div className="flex justify-between"><span className="text-gray-600">Discount:</span><span className="font-medium text-gray-800">- {sale.discount.toLocaleString('en-IN', { style: 'currency', currency: 'NPR' })}</span></div>
             <div className="flex justify-between"><span className="text-gray-600">Tax:</span><span className="font-medium text-gray-800">+ {sale.tax.toLocaleString('en-IN', { style: 'currency', currency: 'NPR' })}</span></div>
-            <div className="flex justify-between pt-2 mt-2 text-base font-bold border-t"><span className="text-gray-900">Grand Total:</span><span className="text-gray-900">{sale.grandTotal.toLocaleString('en-NP', { style: 'currency', currency: 'NPR' })}</span></div>
+            <div className="flex justify-between pt-2 mt-2 text-base font-bold border-t"><span className="text-gray-900">Grand Total:</span><span className="text-gray-900">{sale.grandTotal.toLocaleString('en-IN', { style: 'currency', currency: 'NPR' })}</span></div>
             <div className="flex justify-between"><span className="text-gray-600">Amount Paid:</span><span className="font-medium text-green-600">{sale.amountPaid.toLocaleString('en-IN', { style: 'currency', currency: 'NPR' })}</span></div>
             <div className="flex justify-between p-3 text-lg font-bold text-orange-800 rounded-lg bg-orange-50"><span>Amount Due:</span><span>{sale.amountDue.toLocaleString('en-IN', { style: 'currency', currency: 'NPR' })}</span></div>
         </div>
@@ -158,7 +181,7 @@ const RecordPaymentModal = ({ isOpen, onClose, sale }) => {
                                     {({ isSubmitting }) => (
                                         <Form>
                                             <div className="flex items-center justify-between p-4 border-b"><Dialog.Title className="text-lg font-semibold text-gray-800">Record Payment</Dialog.Title><button type="button" onClick={onClose} className="p-1 text-gray-500 rounded-full hover:bg-gray-100"><X size={20} /></button></div>
-                                            <div className="p-6 space-y-4"><div><label htmlFor="amountPaid" className="block text-sm font-medium text-gray-700">Amount to Pay (Due: {sale.amountDue.toLocaleString('en-IN', { style: 'currency', currency: 'INR' })})</label><Field name="amountPaid" type="number" className="w-full p-2 mt-1 border-gray-300 rounded-md" /><ErrorMessage name="amountPaid">{msg => <div className="flex items-center mt-1 text-xs text-red-600"><CircleAlert size={12} className="mr-1"/> {msg}</div>}</ErrorMessage></div><div><label htmlFor="paymentMethod" className="block text-sm font-medium text-gray-700">Payment Method</label><Field as="select" name="paymentMethod" className="w-full p-2 mt-1 bg-white border-gray-300 rounded-md"><option value="CASH">Cash</option><option value="BANK_TRANSFER">Bank Transfer</option><option value="CARD">Card</option><option value="OTHER">Other</option></Field></div></div>
+                                            <div className="p-6 space-y-4"><div><label htmlFor="amountPaid" className="block text-sm font-medium text-gray-700">Amount to Pay (Due: {sale.amountDue.toLocaleString('en-IN', { style: 'currency', currency: 'NPR' })})</label><Field name="amountPaid" type="number" className="w-full p-2 mt-1 border-gray-300 rounded-md" /><ErrorMessage name="amountPaid">{msg => <div className="flex items-center mt-1 text-xs text-red-600"><CircleAlert size={12} className="mr-1"/> {msg}</div>}</ErrorMessage></div><div><label htmlFor="paymentMethod" className="block text-sm font-medium text-gray-700">Payment Method</label><Field as="select" name="paymentMethod" className="w-full p-2 mt-1 bg-white border-gray-300 rounded-md"><option value="CASH">Cash</option><option value="BANK_TRANSFER">Bank Transfer</option><option value="CARD">Card</option><option value="OTHER">Other</option></Field></div></div>
                                             <div className="flex justify-end p-4 border-t bg-gray-50"><button type="submit" disabled={isSubmitting || isPending} className="inline-flex items-center justify-center w-32 px-4 py-2 text-sm font-medium text-white transition-colors bg-green-600 border border-transparent rounded-md shadow-sm hover:bg-green-700 disabled:bg-gray-400">{isSubmitting || isPending ? <><Loader2 className="w-5 h-5 mr-2 animate-spin" />Saving...</> : <><Save className="w-5 h-5 mr-2" />Save</> }</button></div>
                                         </Form>
                                     )}
@@ -172,7 +195,9 @@ const RecordPaymentModal = ({ isOpen, onClose, sale }) => {
     );
 };
 
-
+// ===================================================================================
+//  2. MAIN PAGE COMPONENT
+// ===================================================================================
 const SaleDetailsPage = () => {
     const { id } = useParams();
     const [isCancelModalOpen, setCancelModalOpen] = useState(false);
@@ -208,13 +233,24 @@ const SaleDetailsPage = () => {
     const canRecordPayment = sale.status !== 'CANCELLED' && sale.paymentStatus !== 'PAID' && sale.saleType === 'CUSTOMER';
 
     return (
-        <div className="min-h-screen p-4 bg-slate-50 sm:p-6 lg:p-8">
-            <div className="max-w-4xl mx-auto">
+        <div className="min-h-screen p-4 bg-slate-50 sm:p-6 lg:p-8 print:bg-white print:p-0">
+            <div className="max-w-4xl mx-auto print:max-w-none">
                 <Link to="/sales" className="inline-flex items-center gap-2 mb-4 text-sm font-medium text-gray-600 print:hidden hover:text-gray-900">
                     <ChevronLeft size={16} />
                     Back to Sales History
                 </Link>
                 <div className="p-8 bg-white shadow-lg print:shadow-none rounded-xl ring-1 ring-gray-900/5 print:ring-0">
+                    
+                    {/* --- NEW: Shop Info for Print --- */}
+                    <ShopInfoForPrint shop={sale.shop} />
+
+                    <div className="items-end justify-between hidden pb-6 mb-6 border-b print:flex">
+                        <div>
+                           <h1 className="text-3xl font-bold text-gray-900">INVOICE</h1>
+                           <p className="text-sm text-gray-500">{sale.invoiceNumber}</p>
+                        </div>
+                    </div>
+
                     <SaleDetailHeader
                         sale={sale}
                         onPrint={() => window.print()}
@@ -224,7 +260,6 @@ const SaleDetailsPage = () => {
                         canRecordPayment={canRecordPayment}
                     />
                     
-                    {/* V-- THE FIX IS HERE --V */}
                     <div className="grid grid-cols-1 gap-8 py-6 md:grid-cols-2">
                         <CustomerInfo customer={sale.customer} />
                         <SaleMetadata sale={sale} />
