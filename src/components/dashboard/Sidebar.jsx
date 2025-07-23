@@ -58,6 +58,7 @@ const Sidebar = () => {
     { to: "/suppliers", label: "Suppliers", icon: Truck },
     { to: "/products", label: "Products", icon: Package },
     { to: "/sales", label: "Sales", icon: ReceiptText },
+    { to: "/purchases", label: "Purchases", icon: Truck },
   ];
 
   const adminLinks = [

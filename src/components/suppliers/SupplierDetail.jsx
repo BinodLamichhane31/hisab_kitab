@@ -152,8 +152,8 @@ const OverviewTab = ({ supplier }) => (
     />
     <StatCard
       icon={DollarSign}
-      title="Outstanding Balance"
-      value={`Rs. ${supplier.totalSpent?.toFixed(2) || '0.00'}`}
+      title="Balance Owed"
+      value={`Rs. ${supplier.currentBalance?.toFixed(2) || '0.00'}`}
     />
     <StatCard
       icon={Calendar}
