@@ -8,14 +8,9 @@ import { Dialog, Transition } from '@headlessui/react';
 import { useGetShopById } from '../../hooks/useShop';
 
 
-// Lucide Icons
 import {
     ChevronLeft, Loader2, CircleAlert, Printer, XCircle, Banknote, Save, X
 } from 'lucide-react';
-
-// ===================================================================================
-//  1. SUB-COMPONENTS (All defined within the same file)
-// ===================================================================================
 
 const SalesStatusBadge = ({ sale }) => {
     let config = { text: 'Due', className: 'bg-red-100 text-red-800' };
@@ -62,10 +57,7 @@ const SaleDetailHeader = ({ sale, onPrint, onCancelClick, onPaymentClick, canCan
 );
 
 const ShopInfoForPrint = ({ shop }) => {
-    const { data: shopData, isLoading } = useGetShopById(shop);
-    console.log(shopData);
-    
-    
+    const { data: shopData, isLoading } = useGetShopById(shop);    
     if (!shopData) return null;
     return (
         <div className="items-center hidden pb-6 mb-6 border-b print:block">
@@ -195,9 +187,6 @@ const RecordPaymentModal = ({ isOpen, onClose, sale }) => {
     );
 };
 
-// ===================================================================================
-//  2. MAIN PAGE COMPONENT
-// ===================================================================================
 const SaleDetailsPage = () => {
     const { id } = useParams();
     const [isCancelModalOpen, setCancelModalOpen] = useState(false);
