@@ -28,7 +28,7 @@ export const useGetSuppliersByShop = (params) => {
   return useQuery({
     queryKey: ['suppliers', params],
     queryFn: () => getSuppliersByShopService(params),
-    select: (res) => res.data,
+    select: (res) => res,
     enabled: !!params?.shopId,
     retry: false,
   });

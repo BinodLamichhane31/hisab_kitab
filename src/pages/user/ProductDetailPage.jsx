@@ -111,8 +111,8 @@ const ProductDetailPage = () => {
 
                             <div className="pt-6 mt-6 border-t">
                                 <div className="grid grid-cols-2 gap-6 sm:grid-cols-3">
-                                    <DetailItem icon={DollarSign} label="Selling Price">₹{product.sellingPrice.toLocaleString()}</DetailItem>
-                                    <DetailItem icon={DollarSign} label="Purchase Price">₹{product.purchasePrice.toLocaleString()}</DetailItem>
+                                    <DetailItem icon={DollarSign} label="Selling Price">Rs. {product.sellingPrice.toLocaleString()}</DetailItem>
+                                    <DetailItem icon={DollarSign} label="Purchase Price">Rs. {product.purchasePrice.toLocaleString()}</DetailItem>
                                     <DetailItem icon={Hash} label="Stock Quantity">{product.quantity} units</DetailItem>
                                     <DetailItem icon={Hash} label="Reorder Level">{product.reorderLevel} units</DetailItem>
                                 </div>

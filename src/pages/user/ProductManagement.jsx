@@ -85,13 +85,11 @@ const TableSkeleton = () => (
     ))
 );
 
-// CHANGE 1: Accept onAddClick as a prop
 const EmptyState = ({ onAddClick }) => (
     <div className="py-20 text-center">
         <Package className="w-16 h-16 mx-auto text-gray-300" />
         <h3 className="mt-4 text-lg font-semibold text-gray-800">No Products Found</h3>
         <p className="mt-1 text-sm text-gray-500">Get started by adding a new product to your inventory.</p>
-        {/* CHANGE 2: Use the onAddClick prop here */}
         <button onClick={onAddClick} className="inline-flex items-center px-4 py-2 mt-6 text-sm font-medium text-white transition-transform transform bg-orange-500 border border-transparent rounded-md shadow-sm hover:bg-orange-600 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">
             <Plus className="w-5 h-5 mr-2 -ml-1" />
             Add Your First Product
@@ -209,7 +207,7 @@ const ProductManagement = () => {
                                                     </div>
                                                 </Link>
                                             </td>
-                                            <td className="hidden px-6 py-4 md:table-cell whitespace-nowrap"><div className="text-sm text-gray-900">₹{product.sellingPrice} <span className="text-gray-500">/ ₹{product.purchasePrice}</span></div></td>
+                                            <td className="hidden px-6 py-4 md:table-cell whitespace-nowrap"><div className="text-sm text-gray-900">Rs. {product.sellingPrice} <span className="text-gray-500">/ Rs. {product.purchasePrice}</span></div></td>
                                             <td className="px-6 py-4 whitespace-nowrap"><div className="text-sm text-gray-900">{product.quantity} units</div></td>
                                             <td className="hidden px-6 py-4 sm:table-cell whitespace-nowrap"><ProductStatusBadge quantity={product.quantity} reorderLevel={product.reorderLevel} /></td>
                                             <td className="px-6 py-4 text-right whitespace-nowrap">

@@ -5,7 +5,6 @@ import AdminRoute from "./AdminRoute";
 import LandingPage from "../pages/Landing";
 import UserDashboard from "../pages/user/DashboardPage";
 import CustomerManagementPage from "../pages/user/CustomerManagementPage";
-import SupplierManagement from "../pages/user/SupplierManagement";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import UserManagement from "../pages/admin/UserManagement";
 import NotFound from "../pages/NotFound";
@@ -17,6 +16,13 @@ import CreateFirstShop from "../pages/user/CreateFirstShop";
 import SupplierManagementPage from "../pages/user/SupplierManagementPage";
 import ProductManagement from "../pages/user/ProductManagement";
 import ProductDetailPage from "../pages/user/ProductDetailPage";
+import SalesPage from "../pages/user/SalesPage";
+import CreateSalePage from "../pages/user/CreateSalePage";
+import SaleDetailsPage from "../pages/user/SaleDetailsPage";
+import PurchasesPage from "../pages/user/PurchasePage";
+import PurchaseDetailsPage from "../pages/user/PurchaseDetailPage";
+import CreatePurchasePage from "../pages/user/CreatePurchasePage";
+import TransactionsPage from "../pages/TransactionsPage";
 
 
 
@@ -50,6 +56,13 @@ function AppRouter() {
           <Route path="/products/:productId" element={<ProductDetailPage />} />
           <Route path="/suppliers" element={<SupplierManagementPage />} />
           <Route path="/suppliers/:supplierId" element={<SupplierManagementPage />} />
+          <Route path="/sales" element={<SalesPage />} />
+          <Route path="/sales/new" element={<CreateSalePage />} />
+          <Route path="/sales/:id" element={<SaleDetailsPage />} />
+          <Route path="/purchases" element={<PurchasesPage />} />
+          <Route path="/purchases/:id" element={<PurchaseDetailsPage />} />
+          <Route path="/purchases/new" element={<CreatePurchasePage />} />
+          <Route path="/transactions" element={<TransactionsPage />} />
         </Route>
 
         {/* Route WITHOUT the Dashboard Layout (but still private) */}
