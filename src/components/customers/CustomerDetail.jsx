@@ -143,7 +143,7 @@ const StatCard = ({ icon: Icon, title, value }) => (
   </div>
 );
 
-const OverviewTab = ({ customer }) => (
+const OverviewTab = ({ customer }) => (  
   <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
     <StatCard
       icon={MdMoney}
@@ -187,9 +187,9 @@ const DetailsTab = ({ customer }) => (
   </div>
 );
 
-const TransactionsTab = ({ customer }) => {
-  console.log(customer);
-  
+const TransactionsTab = ({ customer }) => {  
+    console.log(customer)
+
   const { currentShop } = useContext(AuthContext);
 
   const { data, isLoading, isError, error } = useGetTransactions({

@@ -151,7 +151,7 @@ const OverviewTab = ({ supplier }) => (
     <StatCard
       icon={MdMoney}
       title="Total Supplied"
-      value={`Rs. ${supplier.totalSpent?.toFixed(2) || '0.00'}`}
+      value={`Rs. ${supplier.totalSupplied?.toFixed(2) || '0.00'}`}
     />
     <StatCard
       icon={DollarSign}
