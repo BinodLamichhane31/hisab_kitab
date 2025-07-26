@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect, useCallback, useMemo } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useGetShops, useSelectActiveShop } from "../hooks/useShop";
+import { socket } from "../socket";
 
 export const AuthContext = createContext();
 
@@ -30,6 +31,15 @@ const AuthContextProvider = ({ children }) => {
         }
     }, [shops, currentShopId]);
 
+    useEffect(() => {
+        if (user?._id) {
+            socket.connect();
+            socket.emit('joinRoom', user._id);
+        } else {
+            socket.disconnect();
+        }
+        return () => { socket.disconnect(); };
+    }, [user]);
 
     const login = useCallback((loginData) => {
         const { data, token } = loginData;
