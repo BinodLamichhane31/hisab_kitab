@@ -40,7 +40,7 @@ export default function ProductSelectionModalForPurchase({ isOpen, onClose }) {
             productId: product._id,
             name: product.name,
             quantity: 1, 
-            unitCost: product.purchasePrice || 0, // <-- Key difference: Use purchasePrice
+            unitCost: product.purchasePrice || 0, 
         }));
 
         if(newItems.length > 0) {

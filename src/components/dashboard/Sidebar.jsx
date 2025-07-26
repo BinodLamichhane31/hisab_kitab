@@ -12,7 +12,11 @@ import {
   UserPlus,
   Bell, 
   TagIcon,
-  ReceiptText
+  ReceiptText,
+  ShoppingBag,
+  LogsIcon,
+  Replace,
+  History
 } from 'lucide-react';
 import { AuthContext } from '../../auth/authProvider';
 import ShopSwitcher from './ShopSwitcher'; 
@@ -58,7 +62,8 @@ const Sidebar = () => {
     { to: "/suppliers", label: "Suppliers", icon: Truck },
     { to: "/products", label: "Products", icon: Package },
     { to: "/sales", label: "Sales", icon: ReceiptText },
-    { to: "/purchases", label: "Purchases", icon: Truck },
+    { to: "/purchases", label: "Purchases", icon: ShoppingBag },
+    { to: "/transactions", label: "Transactions", icon: History },
   ];
 
   const adminLinks = [

@@ -9,7 +9,6 @@ import { useGetShopById } from '../../hooks/useShop';
 
 import { ChevronLeft, Loader2, CircleAlert, Printer, XCircle, Banknote, Save, X } from 'lucide-react';
 
-// Reusable StatusBadge from PurchasesPage.jsx (or a shared components file)
 const StatusBadge = ({ record }) => {
     let config = { text: 'Unpaid', className: 'bg-red-100 text-red-800' };
     if (record.status === 'CANCELLED') {
@@ -25,7 +24,6 @@ const StatusBadge = ({ record }) => {
     return <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${config.className}`}>{config.text}</span>;
 };
 
-// All sub-components below are adapted for Purchase data
 const PurchaseDetailHeader = ({ purchase, onPrint, onCancelClick, onPaymentClick, canCancel, canRecordPayment }) => (
     <div className="flex flex-col items-start justify-between gap-4 pb-6 border-b print:hidden md:flex-row md:items-center">
         <div>

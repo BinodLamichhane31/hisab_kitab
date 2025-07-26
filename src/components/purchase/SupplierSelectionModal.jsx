@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { useFormikContext } from 'formik';
 import { Dialog } from '@headlessui/react';
-import { useGetSuppliersByShop } from '../../hooks/useSupplier'; // <-- Use Supplier Hook
+import { useGetSuppliersByShop } from '../../hooks/useSupplier'; 
 import useDebounce from '../../hooks/useDebounce';
 import { AuthContext } from '../../auth/authProvider';
 import { Search, X, Loader2, User, CircleAlert } from 'lucide-react';
@@ -12,12 +12,12 @@ export default function SupplierSelectionModal({ isOpen, onClose }) {
     const [searchTerm, setSearchTerm] = useState('');
     const debouncedSearch = useDebounce(searchTerm, 300);
 
-    // <-- Use Supplier Hook -->
-    const { data: suppliers, isLoading, isError } = useGetSuppliersByShop({
+    const { data: suppliersResponse, isLoading, isError } = useGetSuppliersByShop({
         shopId: currentShop?._id,
         search: debouncedSearch,
     });
      
+    const suppliers = suppliersResponse?.data || [];
 
     const handleSelect = (supplier) => {
         setFieldValue('supplierId', supplier._id);

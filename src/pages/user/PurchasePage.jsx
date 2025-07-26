@@ -1,20 +1,19 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useGetPurchases } from '../../hooks/usePurchase'; // <-- Use Purchase Hook
+import { useGetPurchases } from '../../hooks/usePurchase'; 
 import useDebounce from '../../hooks/useDebounce';
 import { AuthContext } from '../../auth/authProvider';
 
 import {
     Search,
     Plus,
-    ShoppingCart, // <-- Changed Icon
+    ShoppingCart, 
     Loader2,
     ChevronLeft,
     ChevronRight,
     CircleAlert
 } from 'lucide-react';
 
-// Reusable component, can be moved to a shared file
 const StatusBadge = ({ record }) => {
     let config = { text: 'Due', className: 'bg-red-100 text-red-800' };
 
@@ -28,7 +27,7 @@ const StatusBadge = ({ record }) => {
             case 'PARTIAL':
                 config = { text: 'Partial', className: 'bg-yellow-100 text-yellow-800' };
                 break;
-            case 'UNPAID': // Changed from DUE for consistency with backend
+            case 'UNPAID': 
                 config = { text: 'Unpaid', className: 'bg-red-100 text-red-800' };
                 break;
             default:
@@ -43,7 +42,6 @@ const StatusBadge = ({ record }) => {
     );
 };
 
-// Reusable component, no changes needed
 const TableSkeleton = ({ columns = 6 }) => (
     [...Array(8)].map((_, i) => (
         <tr key={i} className="animate-pulse">
@@ -57,7 +55,6 @@ const TableSkeleton = ({ columns = 6 }) => (
     ))
 );
 
-// Changed text and icon for Purchases
 const EmptyState = ({ onAddClick }) => (
     <div className="py-20 text-center">
         <ShoppingCart className="w-16 h-16 mx-auto text-gray-300" />
@@ -80,13 +77,12 @@ const PurchasesPage = () => {
 
     const [filters, setFilters] = useState({
         search: '',
-        purchaseType: '', // <-- Changed from saleType
+        purchaseType: '',
         paymentStatus: '',
     });
     const [currentPage, setCurrentPage] = useState(1);
     const debouncedSearch = useDebounce(filters.search, 500);
 
-    // <-- Using Purchase Hooks -->
     const { data, isLoading, isError, error } = useGetPurchases({
         shopId,
         page: currentPage,
@@ -195,7 +191,6 @@ const PurchasesPage = () => {
                             </tbody>
                         </table>
                     </div>
-                     {/* Pagination Controls */}
                     {purchases.length > 0 && pagination.totalPages > 1 && (
                         <div className="flex items-center justify-between px-6 py-3 bg-white border-t border-gray-200">
                             <div className="hidden text-sm text-gray-700 sm:block">Page <span className="font-medium">{currentPage}</span> of <span className="font-medium">{pagination.totalPages}</span></div>

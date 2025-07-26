@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useDeleteCustomer, useGetCustomerById } from '../../hooks/useCustomer';
 import Table from '../common/Table'; 
 import { User, FileText, Receipt, DollarSign, ShoppingBag, Calendar, UserCog, Pencil, Mail, Phone, MapPin, Trash } from 'lucide-react';
 import { MdMoney } from 'react-icons/md';
 import CustomerFormModal from './CustomerFormModal';
 import { ConfirmationModal } from '../common/ConfirmationModel';
+import { AuthContext } from '../../auth/authProvider';
+import { useGetTransactions } from '../../hooks/useTransaction';
+import TransactionsTable from '../transactions/TransactionsTable';
 
 const getInitials = (name) => {
   if (!name) return '?';
@@ -185,26 +188,28 @@ const DetailsTab = ({ customer }) => (
 );
 
 const TransactionsTab = ({ customer }) => {
-  const columns = [
-    { header: 'Order ID', accessor: 'orderId' },
-    { header: 'Date', accessor: 'date' },
-    { header: 'Amount', accessor: 'amount' },
-    { header: 'Status', accessor: 'status' },
-  ];
-  const transactions = customer.transactions || [];
+  console.log(customer);
+  
+  const { currentShop } = useContext(AuthContext);
+
+  const { data, isLoading, isError, error } = useGetTransactions({
+    shopId: currentShop?._id,
+    relatedCustomer: customer._id, 
+    limit: 100 
+  });
+
+  const transactions = data?.data || [];
 
   return (
-    <div className="p-6 bg-white border border-slate-200 rounded-xl">
-      <h3 className="mb-4 text-lg font-semibold text-slate-800">Transaction History</h3>
-      {transactions.length > 0 ? (
-        <Table columns={columns} data={transactions} />
-      ) : (
-        <div className="py-12 text-center text-slate-500">
-          <Receipt size={40} className="mx-auto mb-2 text-slate-400" />
-          <p className="font-semibold text-slate-600">No Transactions</p>
-          <p className="text-sm">This customer hasn't made any purchases yet.</p>
-        </div>
-      )}
+    <div className="bg-white">
+      <h3 className="px-6 pt-6 mb-4 text-lg font-semibold text-slate-800">Transaction History for {customer.name}</h3>
+      
+      <TransactionsTable 
+        transactions={transactions}
+        isLoading={isLoading}
+        isError={isError}
+        error={error}
+      />
     </div>
   );
 };

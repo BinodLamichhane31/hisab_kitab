@@ -21,10 +21,12 @@ const SupplierList = () => {
   const { currentShop } = useContext(AuthContext);
   const shopId = currentShop?._id;
 
-  const { data: suppliers, isLoading, isError } = useGetSuppliersByShop({
+  const { data: suppliersResponse, isLoading, isError } = useGetSuppliersByShop({
     shopId: shopId,
     search: searchTerm,
   });
+  const suppliers = suppliersResponse?.data || [];
+
 
   useEffect(() => {
     if (activeSupplierId) {
