@@ -9,20 +9,16 @@ import {
   UserCog,
   Logs,
   LogOut,
-  UserPlus,
-  Bell, 
-  TagIcon,
   ReceiptText,
   ShoppingBag,
-  LogsIcon,
-  Replace,
   History
 } from 'lucide-react';
 import { AuthContext } from '../../auth/authProvider';
 import ShopSwitcher from './ShopSwitcher'; 
-import { MdAddShoppingCart, MdSell } from 'react-icons/md';
 import AddShopModal from '../shop/AddShopModal';
-import { Tag } from 'lucide';
+import { MdAddShoppingCart } from 'react-icons/md';
+
+import Notification from '../notification/Notification';
 
 const ProfileSection = ({ user, logout }) => (
   <div className="p-2 pt-4 mt-auto border-t border-gray-200">
@@ -44,7 +40,6 @@ const ProfileSection = ({ user, logout }) => (
     </div>
   </div>
 );
-
 
 const Sidebar = () => {
   const { user, logout } = useContext(AuthContext);
@@ -75,23 +70,21 @@ const Sidebar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   return (
-    <aside className="sticky top-0 flex flex-col h-screen p-4 bg-white border-r border-gray-200 w-72">
+    <aside className="sticky top-0 z-20 flex flex-col h-screen p-4 bg-white border-r border-gray-200 w-72">
       
       <div className="flex items-center gap-2 mb-4">
         <div className="flex-1">
           <ShopSwitcher />
         </div>
         
-        <button className="p-2.5 text-gray-500 rounded-lg hover:bg-gray-100 transition-colors duration-200">
-          <Bell size={20} />
-        </button>
+        <Notification />
+
       </div>
 
-
       <button 
-      className="flex items-center justify-center w-full gap-2 px-4 py-2.5 mb-4 text-sm font-semibold text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50"
-      title='Add New Shop'
-      onClick={()=>setIsModalOpen(true)}
+        className="flex items-center justify-center w-full gap-2 px-4 py-2.5 mb-4 text-sm font-semibold text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50"
+        title='Add New Shop'
+        onClick={()=>setIsModalOpen(true)}
       >
         <MdAddShoppingCart size={16} />
         Add Shop
@@ -121,6 +114,7 @@ const Sidebar = () => {
       </nav>
 
       <ProfileSection user={user} logout={logout} />
+
       {isModalOpen && (
         <AddShopModal isOpen={isModalOpen} onClose={()=>setIsModalOpen(false)}/>
       )}
