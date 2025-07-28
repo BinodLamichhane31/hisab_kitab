@@ -11,7 +11,7 @@ import NotFound from "../pages/NotFound";
 import { AuthContext } from "../auth/authProvider";
 import { useContext } from "react";
 import SystemLogsPage from "../pages/admin/SystemLogs";
-import FullPageLoader from "../components/ui/FullPageLoader"; 
+import FullPageLoader from "../components/ui/FullPageLoader";
 import CreateFirstShop from "../pages/user/CreateFirstShop";
 import SupplierManagementPage from "../pages/user/SupplierManagementPage";
 import ProductManagement from "../pages/user/ProductManagement";
@@ -23,67 +23,65 @@ import PurchasesPage from "../pages/user/PurchasePage";
 import PurchaseDetailsPage from "../pages/user/PurchaseDetailPage";
 import CreatePurchasePage from "../pages/user/CreatePurchasePage";
 import TransactionsPage from "../pages/TransactionsPage";
-
-
+import HisabAssistant from "../components/bot/HisabAssistant";
 
 function AppRouter() {
   const { user, isLoading } = useContext(AuthContext);
-
 
   if (isLoading) {
     return <FullPageLoader />;
   }
 
   return (
-    <Routes>
-      <Route
-        path="/"
-        element={
-          user
-            ? (user?.role === 'admin' ?<Navigate to="/admin/dashboard" replace /> : <Navigate to="/dashboard" replace />)
-            :  <LandingPage />
-        }
-      />
+    <>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            user
+              ? (user?.role === 'admin' ? <Navigate to="/admin/dashboard" replace /> : <Navigate to="/dashboard" replace />)
+              : <LandingPage />
+          }
+        />
 
-      {/* ---------------- PRIVATE USER ROUTES ---------------- */}
-       <Route element={<PrivateRoute />}>
-        {/* Routes WITH the Dashboard Layout */}
-        <Route element={<DashboardLayout />}>
-          <Route path="/dashboard" element={<UserDashboard />} />
-          <Route path="/customers" element={<CustomerManagementPage />} />
-          <Route path="/customers/:customerId" element={<CustomerManagementPage />} />
-          <Route path="/products" element={<ProductManagement />} />
-          <Route path="/products/:productId" element={<ProductDetailPage />} />
-          <Route path="/suppliers" element={<SupplierManagementPage />} />
-          <Route path="/suppliers/:supplierId" element={<SupplierManagementPage />} />
-          <Route path="/sales" element={<SalesPage />} />
-          <Route path="/sales/new" element={<CreateSalePage />} />
-          <Route path="/sales/:id" element={<SaleDetailsPage />} />
-          <Route path="/purchases" element={<PurchasesPage />} />
-          <Route path="/purchases/:id" element={<PurchaseDetailsPage />} />
-          <Route path="/purchases/new" element={<CreatePurchasePage />} />
-          <Route path="/transactions" element={<TransactionsPage />} />
+        {/* ---------------- PRIVATE USER ROUTES ---------------- */}
+        <Route element={<PrivateRoute />}>
+          {/* Routes WITH the Dashboard Layout */}
+          <Route element={<DashboardLayout />}>
+            <Route path="/dashboard" element={<UserDashboard />} />
+            <Route path="/customers" element={<CustomerManagementPage />} />
+            <Route path="/customers/:customerId" element={<CustomerManagementPage />} />
+            <Route path="/products" element={<ProductManagement />} />
+            <Route path="/products/:productId" element={<ProductDetailPage />} />
+            <Route path="/suppliers" element={<SupplierManagementPage />} />
+            <Route path="/suppliers/:supplierId" element={<SupplierManagementPage />} />
+            <Route path="/sales" element={<SalesPage />} />
+            <Route path="/sales/new" element={<CreateSalePage />} />
+            <Route path="/sales/:id" element={<SaleDetailsPage />} />
+            <Route path="/purchases" element={<PurchasesPage />} />
+            <Route path="/purchases/:id" element={<PurchaseDetailsPage />} />
+            <Route path="/purchases/new" element={<CreatePurchasePage />} />
+            <Route path="/transactions" element={<TransactionsPage />} />
+          </Route>
+
+          {/* Route WITHOUT the Dashboard Layout (but still private) */}
+          <Route path="/create-first-shop" element={<CreateFirstShop />} />
         </Route>
 
-        {/* Route WITHOUT the Dashboard Layout (but still private) */}
-        <Route path="/create-first-shop" element={<CreateFirstShop />} />
-      </Route>
-
-
-      {/* ----------------- PRIVATE ADMIN ROUTES ----------------- */}
-      <Route element={<AdminRoute />}>
-        <Route element={<DashboardLayout />}>
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          <Route path="/admin/users" element={<UserManagement />} />
-          <Route path="/admin/system-logs" element={<SystemLogsPage />} />
+        {/* ----------------- PRIVATE ADMIN ROUTES ----------------- */}
+        <Route element={<AdminRoute />}>
+          <Route element={<DashboardLayout />}>
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/admin/users" element={<UserManagement />} />
+            <Route path="/admin/system-logs" element={<SystemLogsPage />} />
+          </Route>
         </Route>
-      </Route>
 
-
-      <Route path="*" element={<NotFound />} />
-    </Routes>
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+      {user && <HisabAssistant />}
+    </>
   );
 }
 
 export default AppRouter;
-
