@@ -9,9 +9,9 @@ export const initiateSubscriptionService = async () => {
     }
 };
 
-export const verifySubscriptionService = async (esewaData) => {
+export const verifySubscriptionService = async (verificationData) => {
     try {
-        const response = await verifySubscriptionApi(esewaData);
+        const response = await verifySubscriptionApi(verificationData);
         return response.data;
     } catch (error) {
         throw error.response?.data || { message: 'Payment verification failed.' };

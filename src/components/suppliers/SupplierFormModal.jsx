@@ -78,7 +78,7 @@ const SupplierFormModal = ({ shopId, onClose, supplierToEdit }) => {
 
   return (
     <div
-      className="fixed inset-0 z-10 flex items-center justify-center p-4 bg-black/50"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
       onClick={onClose}
     >
       <div
@@ -87,7 +87,7 @@ const SupplierFormModal = ({ shopId, onClose, supplierToEdit }) => {
       >
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-slate-200">
-          <h2 className="text-lg font-semibold text-slate-800">Create New Supplier</h2>
+          <h2 className="text-lg font-semibold text-slate-800">{modalTitle}</h2>
           <button
             onClick={onClose}
             className="p-1 rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-600 focus:outline-none"

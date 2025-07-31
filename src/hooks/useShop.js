@@ -12,6 +12,7 @@ export const useCreateShop = () =>{
             onSuccess: (data) =>{   
                 toast.success(data.message || "New shop added.")
                 queryClient.invalidateQueries(["shops"])
+                queryClient.invalidateQueries({ queryKey: ["profile"] });
             },
             onError: (error)=>{
                 toast.error(error.message || "Failed to add new shop.")
@@ -61,28 +62,30 @@ export const useUpdateShop = () =>{
     )
 }
 
-export const useDeleteShop = async() =>{
-    const queryClient = useQueryClient()
-    return useMutation(
-        {
-            mutationFn:(id) => deleteShopService(id),
-            onSuccess: (data) =>{
-                toast.success(data.message,"Shop deleted.")
-                queryClient.invalidateQueries(['shops'])
-            },
-            onError: (err) =>{
-                toast.error(err.message,"Failed to delete shop.")
-            }
+export const useDeleteShop = () => { 
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (id) => deleteShopService(id),
+        onSuccess: (data) => {
+            toast.success(data.message || "Shop deleted successfully 1."); 
+            queryClient.invalidateQueries({ queryKey: ['shops'] });
+            queryClient.invalidateQueries({ queryKey: ['profile'] });
+        },
+        onError: (err) => {
+            toast.error(err.data?.message || err.message || "Failed to delete shop.");
         }
-    )
-}
+    });
+};
+
 
 export const useSelectActiveShop = () => {
     return useMutation(
         {
             mutationFn: (shopId) => selectActiveShopService(shopId),
             onSuccess: (data) =>{
-                toast.success(data.data.message || "Shop switched successfully 11.")
+                console.log(data.data.message );
+                
+                // toast.success(data.data.message || "Shop switched successfully.")
             },
             onError: (error) =>{
                 toast.error(error.message || "Failed to switch shop.")

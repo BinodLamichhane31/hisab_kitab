@@ -18,6 +18,7 @@ const ShopSwitcher = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [switcherRef]);
+  
 
   if (loading || !currentShop) {
     return (
@@ -42,7 +43,7 @@ const ShopSwitcher = () => {
   }
 
   const handleSelectShop = (shopId) => {
-    if (shopId !== currentShop._id) {
+    if (shopId !== currentShop?._id) {
       switchShop(shopId);
     }
     setIsOpen(false);

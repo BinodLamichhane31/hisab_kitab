@@ -4,6 +4,6 @@ export const initiateSubscriptionApi = async () => {
     return axios.post('/payments/initiate-subscription');
 };
 
-export const verifySubscriptionApi = async (esewaData) => {
-    return axios.post('/payments/verify-subscription', { esewaData });
+export const verifySubscriptionApi = async (verificationData) => {
+    return axios.post('/payments/verify-subscription',  verificationData );
 };

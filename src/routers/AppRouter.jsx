@@ -24,6 +24,10 @@ import PurchaseDetailsPage from "../pages/user/PurchaseDetailPage";
 import CreatePurchasePage from "../pages/user/CreatePurchasePage";
 import TransactionsPage from "../pages/TransactionsPage";
 import HisabAssistant from "../components/bot/HisabAssistant";
+import SubscriptionPage from "../pages/user/SubscriptionPage";
+import PaymentStatusPage from "../pages/user/PaymentStatusPage";
+import ShopManagementPage from "../pages/user/ShopManagementPage";
+import ProfilePage from "../pages/ProfilePage";
 
 function AppRouter() {
   const { user, isLoading } = useContext(AuthContext);
@@ -49,6 +53,8 @@ function AppRouter() {
           {/* Routes WITH the Dashboard Layout */}
           <Route element={<DashboardLayout />}>
             <Route path="/dashboard" element={<UserDashboard />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/shops" element={<ShopManagementPage />} />
             <Route path="/customers" element={<CustomerManagementPage />} />
             <Route path="/customers/:customerId" element={<CustomerManagementPage />} />
             <Route path="/products" element={<ProductManagement />} />
@@ -62,16 +68,19 @@ function AppRouter() {
             <Route path="/purchases/:id" element={<PurchaseDetailsPage />} />
             <Route path="/purchases/new" element={<CreatePurchasePage />} />
             <Route path="/transactions" element={<TransactionsPage />} />
+             <Route path="/subscription" element={<SubscriptionPage />} />
           </Route>
 
           {/* Route WITHOUT the Dashboard Layout (but still private) */}
           <Route path="/create-first-shop" element={<CreateFirstShop />} />
+          <Route path="/payment/success" element={<PaymentStatusPage />} />
+          <Route path="/payment/failure" element={<PaymentStatusPage />} />
         </Route>
 
         {/* ----------------- PRIVATE ADMIN ROUTES ----------------- */}
         <Route element={<AdminRoute />}>
           <Route element={<DashboardLayout />}>
-            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/admin/dashboard" element={<UserManagement/>} />
             <Route path="/admin/users" element={<UserManagement />} />
             <Route path="/admin/system-logs" element={<SystemLogsPage />} />
           </Route>

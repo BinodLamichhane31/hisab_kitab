@@ -1,4 +1,4 @@
-import { loginUserApi, logoutUserApi, registerUserApi } from "../api/authApi";
+import { getProfileApi, loginUserApi, logoutUserApi, registerUserApi, updateProfileApi, uploadProfileImageApi } from "../api/authApi";
 
 export const registerUserService = async (formData) =>{
     try {
@@ -35,9 +35,29 @@ export const logoutUserService = async () =>{
 
 export const getProfileService = async () => {
   try {
-    const response = await getProfileApi();
-    return response.data;
+    const res = await getProfileApi();
+    console.log("service:",res.data);
+    
+    return res.data; 
   } catch (error) {
-    throw error.response?.data || { message: "Authentication check failed" };
+    throw error.response?.data || { message: "Failed to fetch profile" };
   }
 };
+
+export const updateProfileService = async (updateData) => {
+    try {
+        const response = await updateProfileApi(updateData);
+        return response.data;
+    } catch (error) {
+        throw error.response?.data || { message: "Failed to update profile" };
+    }
+}
+
+export const uploadProfileImageService = async (formData) => {
+    try {
+        const response = await uploadProfileImageApi(formData);
+        return response.data;
+    } catch (error) {
+        throw error.response?.data || { message: "Failed to upload image" };
+    }
+}
