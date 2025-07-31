@@ -2,15 +2,10 @@ import React from 'react';
 import FeatureCard from './FeatureCard';
 import { motion } from 'framer-motion';
 import {
-  HiOutlineTrendingUp,
-  HiOutlineShoppingBag,
-  HiOutlineUsers,
-  HiOutlineChartBar,
-  HiOutlineBell,
+  HiOutlineTrendingUp, HiOutlineShoppingBag, HiOutlineUsers,
+  HiOutlineChartBar, HiOutlineBell,
 } from 'react-icons/hi';
 import { MdOutlineSmartToy } from 'react-icons/md';
-import { fadeInUp } from '../animations/motions';
-
 
 
 const featureList = [
@@ -23,26 +18,44 @@ const featureList = [
 ];
 
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1, // COOL DESIGN: Staggered animation for cards
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+};
+
 const Features = () => (
-  <section id="features" className="px-16 py-12 bg-white sm:px-16 lg:px-20">
-    <h2 className="mb-10 text-3xl font-bold text-center text-black">
-      Explore <span className="text-orange-500">Key Features</span>
-    </h2>
-    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {featureList.map((f, i) => (
-        <motion.div
-          key={i}
-          className="overflow-hidden text-center text-black"
-          variants={fadeInUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.5, delay: i * 0.1 }}
-        >
-            <FeatureCard key={i} {...f} />
+  <section id="features" className="px-8 py-20 bg-white sm:px-16 lg:px-20">
+    <div className="max-w-screen-xl mx-auto text-center">
+      <h2 className="text-3xl font-bold md:text-4xl text-slate-900">
+        Everything You Need, <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-500">All In One Place</span>
+      </h2>
+      <p className="max-w-2xl mx-auto mt-4 text-slate-600">
+        From daily transactions to insightful reports, HisabKitab provides powerful tools to streamline your business operations.
+      </p>
+    </div>
+    <motion.div
+      className="grid max-w-screen-xl grid-cols-1 gap-8 mx-auto mt-12 sm:grid-cols-2 lg:grid-cols-3"
+      variants={containerVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.2 }}
+    >
+      {featureList.map((feature, i) => (
+        <motion.div key={i} variants={itemVariants}>
+          <FeatureCard {...feature} />
         </motion.div>
       ))}
-    </div>
+    </motion.div>
   </section>
 );
 

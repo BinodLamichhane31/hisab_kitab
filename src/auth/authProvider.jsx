@@ -3,6 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useGetShops, useSelectActiveShop } from "../hooks/useShop";
 import { socket } from "../socket";
 import SwitchingShopOverlay from "../components/ui/SwitchingShopOverlay";
+import LogoutOverlay from "../components/ui/LogoutOverlay";
 import { toast } from "react-toastify";
 
 export const AuthContext = createContext();
@@ -13,6 +14,7 @@ const AuthContextProvider = ({ children }) => {
     const [isSwitchingShop, setIsSwitchingShop] = useState(false); 
     const [switchingToShopName, setSwitchingToShopName] = useState(''); 
     const [toastInfo, setToastInfo] = useState(null);
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
 
     
     const [currentShopId, setCurrentShopId] = useState(() => 
@@ -25,17 +27,21 @@ const AuthContextProvider = ({ children }) => {
     const { mutate: switchShopMutation } = useSelectActiveShop();
 
     const currentShop = useMemo(() => {
-        if (shops && currentShopId) {
+        if (shopsLoading || !shops) {
+            return null;
+        }
+        
+        if (Array.isArray(shops) && currentShopId) {
             return shops.find(s => s._id === currentShopId);
         }
-        return shops?.[0] || null;
-    }, [shops, currentShopId]);
+        return Array.isArray(shops) && shops.length > 0 ? shops[0] : null;
+    }, [shops, currentShopId, shopsLoading]);
     
     useEffect(() => {
-        if (!currentShopId && shops?.length > 0) {
+        if (!currentShopId && !shopsLoading && Array.isArray(shops) && shops.length > 0) {
             setCurrentShopId(shops[0]._id);
         }
-    }, [shops, currentShopId]);
+    }, [shops, currentShopId, shopsLoading]);
 
     useEffect(() => {
         if (user?._id) {
@@ -64,14 +70,42 @@ const AuthContextProvider = ({ children }) => {
     }, [queryClient]);
 
     const logout = useCallback(() => {
-        localStorage.removeItem("user");
-        localStorage.removeItem("token");
-        localStorage.removeItem("currentShopId");
+        setIsLoggingOut(true);
+        try {
+            socket.disconnect();
+        } catch (error) {
+            console.warn('Socket disconnect error:', error);
+        }
+        try {
+            queryClient.clear();
+            queryClient.resetQueries();
+        } catch (error) {
+            console.warn('Query cache clear error:', error);
+        }
+        
+        try {
+            localStorage.removeItem("user");
+            localStorage.removeItem("token");
+            localStorage.removeItem("currentShopId");
+        } catch (error) {
+            console.warn('LocalStorage clear error:', error);
+        }
+        //clear session storage
+        sessionStorage.clear();
+
         
         setUser(null);
         setCurrentShopId(null);
-
-        queryClient.clear();
+        setIsSwitchingShop(false);
+        setSwitchingToShopName('');
+        setToastInfo(null);
+        
+        setTimeout(() => {
+            setIsLoggingOut(false);
+            // window.location.href = '/';
+        }, 200);
+        window.location.reload();
+        console.log('logged out');
     }, [queryClient]);
 
     const showQueuedToast = () => {
@@ -81,12 +115,13 @@ const AuthContextProvider = ({ children }) => {
             } else if (toastInfo.type === 'error') {
                 toast.error(toastInfo.message);
             }
-            // Reset the queue after showing the toast
             setToastInfo(null);
         }
     };
 
     const switchShop = useCallback(async (shopId) => {
+        if (shopsLoading || !Array.isArray(shops)) return;
+        
         const targetShop = shops.find(s => s._id === shopId);
         if (!targetShop) return;
 
@@ -115,7 +150,7 @@ const AuthContextProvider = ({ children }) => {
                 // ... etc ...
             }
         });
-    }, [queryClient, switchShopMutation, currentShop, shops,setToastInfo]);
+    }, [queryClient, switchShopMutation, currentShop, shops, shopsLoading, setToastInfo]);
     
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -129,23 +164,31 @@ const AuthContextProvider = ({ children }) => {
 
     const loading = authLoading || (!!user && shopsLoading);
 
+    // Don't show loading if we're logging out
+    const shouldShowLoading = loading && !isLoggingOut;
+
     return (
         <AuthContext.Provider
             value={{
                 user,
-                shops: shops || [], 
+                shops: Array.isArray(shops) ? shops : [], 
                 currentShop,
-                loading,
+                loading: shouldShowLoading,
                 login,
                 logout,
                 switchShop,
                 isAuthenticated: !!user,
+                isLoggingOut,
             }}
         >
             <SwitchingShopOverlay 
                 isVisible={isSwitchingShop} 
                 shopName={switchingToShopName} 
                 onExitComplete={showQueuedToast}
+            />
+            <LogoutOverlay 
+                isVisible={isLoggingOut} 
+                onExitComplete={() => setIsLoggingOut(false)}
             />
             {children}
         </AuthContext.Provider>

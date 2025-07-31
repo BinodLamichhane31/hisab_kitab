@@ -3,13 +3,16 @@ import { getProfileService, updateProfileService, uploadProfileImageService } fr
 
 export const useGetProfile = () => {
   const token = localStorage.getItem("token"); 
+  const user = JSON.parse(localStorage.getItem("user") || "null");
 
   return useQuery({
     queryKey: ["profile"],
     queryFn: getProfileService,
-    enabled: !!token,
+    enabled: !!token && !!user,
     staleTime: 5 * 60 * 1000,
-    retry: false, 
+    retry: false,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
 };
 

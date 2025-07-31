@@ -14,14 +14,18 @@ export const useLogoutUser = () => {
     mutationFn: logoutUserService,
     mutationKey: ["logout"],
     onSuccess: (data) => {
+      // Show success message
       toast.success(data.message || "Logged out successfully");
-      logout(); 
-      queryClient.setQueryData(['profile'], null);
-      queryClient.removeQueries(); 
-      navigate("/", { replace: true });
+      
+      // Call the context logout function which handles everything
+      logout();
     },
     onError: (error) => {
-        toast.error(error.response?.data?.message || "Logout failed. Please try again.");
+      // Even on error, we should still logout locally
+      toast.error(error.response?.data?.message || "Logout failed. Please try again.");
+      
+      // Call the context logout function which handles everything
+      logout();
     }
   });
 };

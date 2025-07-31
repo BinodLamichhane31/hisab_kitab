@@ -1,6 +1,6 @@
 // src/components/dashboard/Sidebar.js
 
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard, Users, Package, Truck, ShieldCheck, UserCog, Logs, LogOut,
@@ -13,6 +13,7 @@ import { MdAddShoppingCart } from 'react-icons/md';
 import Notification from '../notification/Notification';
 import { useGetProfile } from '../../hooks/auth/useProfile';
 import ShopFormModal from '../shop/ShopFormModal';
+import ConfirmLogoutModal from '../ui/ConfirmLogoutModal';
 
 const API_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:6060/api";
 
@@ -25,6 +26,11 @@ const ProfileSection = ({ user, logout }) => {
 
   const imageUrl = getImageUrl(user?.profileImage);
   console.log(imageUrl);
+
+  const handleLogout = () => {
+    // Call logout directly from context - no API call needed
+    logout();
+  };
 
   return (
     <div className="p-2 pt-4 mt-auto border-t border-gray-200">
@@ -43,7 +49,7 @@ const ProfileSection = ({ user, logout }) => {
           </div>
         </NavLink>
         <button 
-          onClick={logout} 
+          onClick={handleLogout} 
           className="p-2 ml-auto rounded-md hover:bg-gray-100"
           aria-label="Logout"
         >
@@ -56,12 +62,48 @@ const ProfileSection = ({ user, logout }) => {
 
 
 const Sidebar = () => {
-  const { user, logout, switchShop } = useContext(AuthContext);
+  const { user, logout, switchShop, isLoggingOut } = useContext(AuthContext);
   const { data: profileData, isLoading: isProfileLoading, isError } = useGetProfile();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+
+  // Cleanup on unmount or when user becomes null
+  useEffect(() => {
+    if (!user) {
+      setIsModalOpen(false);
+      setIsLogoutModalOpen(false);
+    }
+  }, [user]);
+
+  // Don't render if user is null or logging out
+  if (!user || isLoggingOut) {
+    return null;
+  }
+
   const handleNewShopCreation = (newShop) => {
     if (newShop && newShop._id) {
       switchShop(newShop._id);
     }
+  };
+
+  const handleLogoutClick = () => {
+    // Close any open modals first
+    setIsModalOpen(false);
+    
+    // Open logout confirmation modal
+    setIsLogoutModalOpen(true);
+  };
+
+  const handleLogoutConfirm = () => {
+    // Close the confirmation modal
+    setIsLogoutModalOpen(false);
+    
+    // Call logout
+    logout();
+  };
+
+  const handleLogoutCancel = () => {
+    setIsLogoutModalOpen(false);
   };
 
   const navLinkClasses = ({ isActive }) =>
@@ -87,8 +129,6 @@ const Sidebar = () => {
     { to: "/admin/users", label: "User Management", icon: UserCog },
     { to: "/admin/system-logs", label: "System Logs", icon: Logs },
   ];
-
-  const [isModalOpen, setIsModalOpen] = useState(false)
 
   return (
     <aside className="sticky top-0 z-20 flex flex-col h-screen p-4 bg-white border-r border-gray-200 w-72">
@@ -135,13 +175,22 @@ const Sidebar = () => {
         )}
       </nav>
 
-      <ProfileSection user={profileData?.data} logout={logout} />
+      <ProfileSection user={profileData?.data} logout={handleLogoutClick} />
 
       {isModalOpen && (
         <ShopFormModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       />
+      )}
+
+      {isLogoutModalOpen && (
+        <ConfirmLogoutModal
+          isOpen={isLogoutModalOpen}
+          onClose={handleLogoutCancel}
+          onConfirm={handleLogoutConfirm}
+          isLoading={isLoggingOut}
+        />
       )}
     </aside>
   );

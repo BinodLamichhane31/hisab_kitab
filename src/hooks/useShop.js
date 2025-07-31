@@ -21,16 +21,20 @@ export const useCreateShop = () =>{
     )
 }
 
-export const useGetShops = () =>{
-    return useQuery(
-        {
-            queryKey:['shops'],
-            queryFn: getShopsService,
-            select: (res) => res.data.data,
-            retry: false,
-        }
-    )
-}
+export const useGetShops = () => {
+  const token = localStorage.getItem("token");
+  const user = JSON.parse(localStorage.getItem("user") || "null");
+
+  return useQuery({
+    queryKey: ["shops"],
+    queryFn: getShopsService,
+    select: (response) => response.data?.data || [],
+    enabled: !!token && !!user,
+    staleTime: 5 * 60 * 1000,
+    retry: false,
+    refetchOnWindowFocus: false,
+  });
+};
 
 export const useGetShopById = (id) =>{
     return useQuery(
@@ -79,20 +83,18 @@ export const useDeleteShop = () => {
 
 
 export const useSelectActiveShop = () => {
-    return useMutation(
-        {
-            mutationFn: (shopId) => selectActiveShopService(shopId),
-            onSuccess: (data) =>{
-                console.log(data.data.message );
-                
-                // toast.success(data.data.message || "Shop switched successfully.")
-            },
-            onError: (error) =>{
-                toast.error(error.message || "Failed to switch shop.")
-            }
-        }
-    )
-}
+  const token = localStorage.getItem("token");
+  const user = JSON.parse(localStorage.getItem("user") || "null");
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: selectActiveShopService,
+    enabled: !!token && !!user,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["shops"] });
+    },
+  });
+};
 
 
 

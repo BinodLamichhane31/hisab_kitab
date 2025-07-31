@@ -30,9 +30,22 @@ import ShopManagementPage from "../pages/user/ShopManagementPage";
 import ProfilePage from "../pages/ProfilePage";
 
 function AppRouter() {
-  const { user, isLoading } = useContext(AuthContext);
+  const { user, loading, isLoggingOut } = useContext(AuthContext);
 
-  if (isLoading) {
+  // Show logout overlay if logging out
+  if (isLoggingOut) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-white">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
+          <h2 className="text-xl font-semibold text-gray-700 mb-2">Logging out...</h2>
+          <p className="text-gray-500">Please wait while we secure your session</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (loading) {
     return <FullPageLoader />;
   }
 
