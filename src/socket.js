@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 
-const SOCKET_URL = 'http://localhost:6060'; 
+const SOCKET_URL = 'https://binodlamichhane.com.np/socket.io'; 
 
 export const socket = io(SOCKET_URL, { 
   autoConnect: false,
