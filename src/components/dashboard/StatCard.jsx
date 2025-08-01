@@ -14,7 +14,7 @@ const StatCard = ({ icon: Icon, title, value, isLoading, formatAsCurrency = fals
       ? `Rs. ${value.toLocaleString()}`
       : value.toLocaleString();
       
-    return <span className="text-3xl font-bold text-gray-800">{formattedValue}</span>;
+    return <span className="text-xl font-bold text-gray-800">{formattedValue}</span>;
   };
 
   return (
